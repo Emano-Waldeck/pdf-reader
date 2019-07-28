@@ -1,6 +1,6 @@
 {
   "manifest_version": 2,
-  "version": "0.1.2",
+  "version": "0.1.3",
   "name": "PDF Reader",
   "description": "A PDF Viewer based on Mozilla's pdf.js library",
 
@@ -29,7 +29,7 @@
     "chrome://favicon/"
   ],
 
-  "homepage_url": "http://add0n.com/pdf-reader.html",
+  "homepage_url": "https://add0n.com/pdf-reader.html",
 
   "background": {
     "scripts": [
