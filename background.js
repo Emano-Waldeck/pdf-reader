@@ -70,6 +70,21 @@ chrome.extension.isAllowedFileSchemeAccess(allow => allow && chrome.webNavigatio
     pathSuffix: '.PDF'
   }]
 }));
+// file handling
+if (chrome.fileBrowserHandler) {
+  chrome.fileBrowserHandler.onExecute.addListener((id, details) => {
+    if (id === 'open-as-pdf') {
+      const entries = details.entries;
+      for (const entry of entries) {
+        chrome.tabs.create({
+          url: chrome.runtime.getURL(
+            '/data/pdf.js/web/viewer.html?file=' + encodeURIComponent(entry.toURL())
+          )
+        });
+      }
+    }
+  });
+}
 // Context menu
 chrome.contextMenus.create({
   type: 'normal',
@@ -96,6 +111,11 @@ chrome.contextMenus.onClicked.addListener(({menuItemId, linkUrl}, tab) => {
     });
   }
 });
+
+// browser action
+chrome.browserAction.onClicked.addListener(() => chrome.tabs.create({
+  url: '/data/pdf.js/web/viewer.html?file=/data/viewer/welcome.pdf'
+}));
 
 // FAQs & Feedback
 {

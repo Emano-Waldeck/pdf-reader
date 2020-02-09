@@ -4,7 +4,7 @@
 delete URL.prototype.origin;
 
 // favicon
-{
+try {
   const url = decodeURIComponent(location.search.split('file=')[1].split('&')[0]);
   const set = (href = 'chrome://favicon/' + url)=> {
     const link = document.querySelector('link[rel*="icon"]') || document.createElement('link');
@@ -18,3 +18,4 @@ delete URL.prototype.origin;
   const favicon = protocol + '//' + hostname + '/favicon.ico';
   fetch(favicon).then(r => set(r.ok ? favicon : undefined), set());
 }
+catch (e) {}

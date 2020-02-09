@@ -1,9 +1,8 @@
 {
   "manifest_version": 2,
-  "version": "0.1.3",
+  "version": "0.1.4",
   "name": "PDF Reader",
-  "description": "A PDF Viewer based on Mozilla's pdf.js library",
-
+  "description": "A Portable Document Format (PDF) viewer based on Mozilla's PDF.js library",
   "icons": {
     "16": "data/icons/16.png",
     "18": "data/icons/18.png",
@@ -17,7 +16,6 @@
     "256": "data/icons/256.png",
     "512": "data/icons/512.png"
   },
-
   "permissions": [
     "<all_urls>",
     "tabs",
@@ -26,14 +24,22 @@
     "webRequestBlocking",
     "storage",
     "contextMenus",
-    "chrome://favicon/"
+    "chrome://favicon/",
+    "fileBrowserHandler"
   ],
-
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+  "file_browser_handlers": [{
+    "id": "open-as-pdf",
+    "default_title": "Open with PDF Reader",
+    "file_filters": [
+      "filesystem:*.pdf"
+    ]
+  }],
   "homepage_url": "https://add0n.com/pdf-reader.html",
-
   "background": {
     "scripts": [
       "background.js"
     ]
-  }
+  },
+  "browser_action": {}
 }
