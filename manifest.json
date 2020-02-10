@@ -1,6 +1,6 @@
 {
   "manifest_version": 2,
-  "version": "0.1.4",
+  "version": "0.1.5",
   "name": "PDF Reader",
   "description": "A Portable Document Format (PDF) viewer based on Mozilla's PDF.js library",
   "icons": {
