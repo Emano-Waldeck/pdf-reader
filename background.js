@@ -33,11 +33,11 @@ chrome.webRequest.onHeadersReceived.addListener(({url, method, responseHeaders})
   if (type() !== true) {
     return;
   }
-  const redirectUrl = chrome.runtime.getURL(
-    '/data/pdf.js/web/viewer.html?file=' + encodeURIComponent(url)
-  );
+  chrome.tabs.update({
+    'url': '/data/pdf.js/web/viewer.html?file=' + encodeURIComponent(url)
+  });
   return {
-    redirectUrl
+    redirectUrl: 'javascript:'
   };
 }, {
   urls: ['<all_urls>'],

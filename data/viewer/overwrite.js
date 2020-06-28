@@ -20,14 +20,3 @@ try {
   fetch(favicon).then(r => set(r.ok ? favicon : undefined), set());
 }
 catch (e) {}
-
-// worker requests
-navigator.serviceWorker.addEventListener('message', e => {
-  if (e.data.method === 'open-file') {
-    const reader = new FileReader();
-    reader.onload = () => {
-      PDFViewerApplication.open(new Uint8Array(reader.result));
-    };
-    reader.readAsArrayBuffer(e.data.file);
-  }
-});
