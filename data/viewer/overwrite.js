@@ -1,4 +1,3 @@
-/* global PDFViewerApplication */
 'use strict';
 
 // prevent CROS error
