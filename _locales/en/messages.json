@@ -1,0 +1,5 @@
+{
+  "description": {
+    "message": "A general-purpose Portable Document Format (PDF) viewer based on Mozilla's PDF.js library"
+  }
+}

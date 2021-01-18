@@ -2,3 +2,9 @@
 .secondaryToolbarButton.copyLink::before {
     content: url(../viewer/copy.png);
 }
+@media screen and (-webkit-min-device-pixel-ratio: 1.1), screen and (min-resolution: 1.1dppx) {
+  .toolbarButton.copyLink::before,
+  .secondaryToolbarButton.copyLink::before {
+      content: url(../viewer/copy@2x.png);
+  }
+}
