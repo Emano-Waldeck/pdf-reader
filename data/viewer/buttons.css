@@ -1,0 +1,4 @@
+.toolbarButton.copyLink::before,
+.secondaryToolbarButton.copyLink::before {
+    content: url(../viewer/copy.png);
+}

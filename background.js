@@ -1,5 +1,19 @@
 'use strict';
 
+const build = href => {
+  if (href.indexOf('www.google.') !== -1 && href.indexOf('/url?') !== -1 && href.indexOf('&url=') !== -1) {
+    href = decodeURIComponent(href.split('&url=')[1].split('&')[0]);
+  }
+  const splitter = href.indexOf('?') === -1 ? (href.indexOf('#') === -1 ? '' : '#') : '?';
+  if (splitter) {
+    const [root, args] = href.split(splitter);
+    return chrome.runtime.getURL('/data/pdf.js/web/viewer.html') + '?file=' + encodeURIComponent(root) + splitter + args;
+  }
+  else {
+    return chrome.runtime.getURL('/data/pdf.js/web/viewer.html') + '?file=' + encodeURIComponent(href);
+  }
+};
+
 // remote sources
 const observe = ({url, method, responseHeaders}) => {
   if (method !== 'GET') {
@@ -37,8 +51,9 @@ const observe = ({url, method, responseHeaders}) => {
   // chrome.tabs.update(tabId, {
   //   url: '/data/pdf.js/web/viewer.html?file=' + encodeURIComponent(url)
   // });
+
   return {
-    redirectUrl: chrome.runtime.getURL('/data/pdf.js/web/viewer.html') + '?file=' + encodeURIComponent(url)
+    redirectUrl: build(url)
   };
 };
 const start = () => chrome.storage.local.get({
@@ -73,9 +88,7 @@ chrome.extension.isAllowedFileSchemeAccess(allow => allow && chrome.webNavigatio
     if (url.includes('pdfjs.action=download')) {
       return;
     }
-    url = chrome.runtime.getURL(
-      '/data/pdf.js/web/viewer.html?file=' + encodeURIComponent(url)
-    );
+    url = chrome.runtime.getURL(build(url));
     chrome.tabs.update(tabId, {
       url
     });
@@ -126,15 +139,57 @@ chrome.storage.local.get({
   type: 'checkbox',
   checked: prefs.frames
 }));
+chrome.contextMenus.create({
+  id: 'theme',
+  title: 'Themes',
+  contexts: ['browser_action']
+});
+chrome.storage.local.get({
+  theme: 'dark-1'
+}, prefs => {
+  chrome.contextMenus.create({
+    id: 'dark-1',
+    title: 'Dark Theme (1)',
+    contexts: ['browser_action'],
+    parentId: 'theme',
+    type: 'radio',
+    checked: prefs.theme === 'dark-1'
+  });
+  chrome.contextMenus.create({
+    id: 'dark-2',
+    title: 'Dark Theme (2)',
+    contexts: ['browser_action'],
+    parentId: 'theme',
+    type: 'radio',
+    checked: prefs.theme === 'dark-2'
+  });
+  chrome.contextMenus.create({
+    id: 'light-1',
+    title: 'Light Theme (1)',
+    contexts: ['browser_action'],
+    parentId: 'theme',
+    type: 'radio',
+    checked: prefs.theme === 'light-1'
+  });
+  chrome.contextMenus.create({
+    id: 'light-2',
+    title: 'Light Theme (2)',
+    contexts: ['browser_action'],
+    parentId: 'theme',
+    type: 'radio',
+    checked: prefs.theme === 'light-2'
+  });
+});
+
 chrome.contextMenus.onClicked.addListener(({menuItemId, linkUrl, checked}, tab) => {
-  if (menuItemId.startsWith('open-with')) {
-    if (linkUrl.indexOf('www.google.') !== -1 && linkUrl.indexOf('/url?') !== -1 && linkUrl.indexOf('&url=') !== -1) {
-      linkUrl = decodeURIComponent(linkUrl.split('&url=')[1].split('&')[0]);
-    }
+  if (menuItemId.startsWith('dark-') || menuItemId.startsWith('light-')) {
+    chrome.storage.local.set({
+      theme: menuItemId
+    });
+  }
+  else if (menuItemId.startsWith('open-with')) {
     chrome.tabs.create({
-      url: chrome.runtime.getURL(
-        '/data/pdf.js/web/viewer.html?file=' + encodeURIComponent(linkUrl)
-      ),
+      url: build(linkUrl),
       index: tab.index + 1,
       active: menuItemId.endsWith('-bg') === false
     });
