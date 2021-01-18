@@ -46,12 +46,18 @@ document.addEventListener('DOMContentLoaded', () => {
   title = document.title;
   const parent = document.getElementById('toolbarViewerRight');
   const button = document.createElement('button');
-  button.onclick = () => navigator.clipboard.writeText(args.get('file')).then(() => {
-    document.title = 'Done!';
-    setTimeout(() => {
-      document.title = title;
-    }, 1000);
-  }).catch(e => alert(e.message));
+  button.onclick = () => {
+    let href = args.get('file').split('#')[0];
+    if (PDFViewerApplication.page) {
+      href += '#page=' + PDFViewerApplication.page;
+    }
+    navigator.clipboard.writeText(href).then(() => {
+      document.title = 'Done!';
+      setTimeout(() => {
+        document.title = title;
+      }, 1000);
+    }).catch(e => alert(e.message));
+  };
   button.classList.add('toolbarButton', 'copyLink');
   const span = document.createElement('span');
   span.textContent = button.title = 'Copy PDF Link';
