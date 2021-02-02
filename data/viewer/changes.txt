@@ -1,8 +1,6 @@
-comment pdf.worker.js
-  this.setFlags(_util.AnnotationFlag.HIDDEN);
-
 add
   <script src="../../viewer/overwrite.js"></script>
   <link rel="stylesheet" href="../../viewer/buttons.css">
   <link rel="stylesheet" href="../../viewer/theme.css">
 to viewer.html
+

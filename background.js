@@ -4,7 +4,8 @@ const build = href => {
   if (href.indexOf('www.google.') !== -1 && href.indexOf('/url?') !== -1 && href.indexOf('&url=') !== -1) {
     href = decodeURIComponent(href.split('&url=')[1].split('&')[0]);
   }
-  const splitter = href.indexOf('?') === -1 ? (href.indexOf('#') === -1 ? '' : '#') : '?';
+  // const splitter = href.indexOf('?') === -1 ? (href.indexOf('#') === -1 ? '' : '#') : '?';
+  const splitter = href.indexOf('#') === -1 ? '' : '#';
   if (splitter) {
     const [root, args] = href.split(splitter);
     return chrome.runtime.getURL('/data/pdf.js/web/viewer.html') + '?file=' + encodeURIComponent(root) + splitter + args;
@@ -88,7 +89,7 @@ chrome.extension.isAllowedFileSchemeAccess(allow => allow && chrome.webNavigatio
     if (url.includes('pdfjs.action=download')) {
       return;
     }
-    url = chrome.runtime.getURL(build(url));
+    url = build(url);
     chrome.tabs.update(tabId, {
       url
     });
@@ -144,8 +145,27 @@ chrome.contextMenus.create({
   title: 'Themes',
   contexts: ['browser_action']
 });
+chrome.contextMenus.create({
+  id: 'options',
+  title: 'Rendering Options',
+  contexts: ['browser_action']
+});
 chrome.storage.local.get({
-  theme: 'dark-1'
+  'theme': 'dark-1',
+  'enableScripting': false,
+  'disablePageLabels': false,
+  'enablePermissions': false,
+  'enablePrintAutoRotate': false,
+  'enableWebGL': false,
+  'historyUpdateUrl': true,
+  'ignoreDestinationZoom': false,
+  'pdfBugEnabled': false,
+  'renderInteractiveForms': true,
+  'useOnlyCssZoom': false,
+  'disableAutoFetch': false,
+  'disableFontFace': false,
+  'disableRange': false,
+  'disableStream': false
 }, prefs => {
   chrome.contextMenus.create({
     id: 'dark-1',
@@ -179,15 +199,122 @@ chrome.storage.local.get({
     type: 'radio',
     checked: prefs.theme === 'light-2'
   });
+  chrome.contextMenus.create({
+    id: 'enableScripting',
+    title: 'Enable Scripting',
+    contexts: ['browser_action'],
+    parentId: 'options',
+    type: 'checkbox',
+    checked: prefs.enableScripting
+  });
+  chrome.contextMenus.create({
+    id: 'disablePageLabels',
+    title: 'Disable Page Labels',
+    contexts: ['browser_action'],
+    parentId: 'options',
+    type: 'checkbox',
+    checked: prefs.disablePageLabels
+  });
+  chrome.contextMenus.create({
+    id: 'enablePermissions',
+    title: 'Enable Permissions',
+    contexts: ['browser_action'],
+    parentId: 'options',
+    type: 'checkbox',
+    checked: prefs.enablePermissions
+  });
+  chrome.contextMenus.create({
+    id: 'enablePrintAutoRotate',
+    title: 'Enable Print Auto-Rotate',
+    contexts: ['browser_action'],
+    parentId: 'options',
+    type: 'checkbox',
+    checked: prefs.enablePrintAutoRotate
+  });
+  chrome.contextMenus.create({
+    id: 'enableWebGL',
+    title: 'Enable WebGL',
+    contexts: ['browser_action'],
+    parentId: 'options',
+    type: 'checkbox',
+    checked: prefs.enableWebGL
+  });
+  chrome.contextMenus.create({
+    id: 'historyUpdateUrl',
+    title: 'History Update URL',
+    contexts: ['browser_action'],
+    parentId: 'options',
+    type: 'checkbox',
+    checked: prefs.historyUpdateUrl
+  });
+  chrome.contextMenus.create({
+    id: 'ignoreDestinationZoom',
+    title: 'Ignore Destination Zoom',
+    contexts: ['browser_action'],
+    parentId: 'options',
+    type: 'checkbox',
+    checked: prefs.ignoreDestinationZoom
+  });
+  chrome.contextMenus.create({
+    id: 'pdfBugEnabled',
+    title: 'PDF Bug Enabled',
+    contexts: ['browser_action'],
+    parentId: 'options',
+    type: 'checkbox',
+    checked: prefs.pdfBugEnabled
+  });
+  chrome.contextMenus.create({
+    id: 'renderInteractiveForms',
+    title: 'Render Interactive Forms',
+    contexts: ['browser_action'],
+    parentId: 'options',
+    type: 'checkbox',
+    checked: prefs.renderInteractiveForms
+  });
+  chrome.contextMenus.create({
+    id: 'useOnlyCssZoom',
+    title: 'Use Only CSS Zoom',
+    contexts: ['browser_action'],
+    parentId: 'options',
+    type: 'checkbox',
+    checked: prefs.useOnlyCssZoom
+  });
+  chrome.contextMenus.create({
+    id: 'disableAutoFetch',
+    title: 'Disable Auto Fetch',
+    contexts: ['browser_action'],
+    parentId: 'options',
+    type: 'checkbox',
+    checked: prefs.disableAutoFetch
+  });
+  chrome.contextMenus.create({
+    id: 'disableFontFace',
+    title: 'Disable Font Face',
+    contexts: ['browser_action'],
+    parentId: 'options',
+    type: 'checkbox',
+    checked: prefs.disableFontFace
+  });
+  chrome.contextMenus.create({
+    id: 'disableRange',
+    title: 'Disable Range',
+    contexts: ['browser_action'],
+    parentId: 'options',
+    type: 'checkbox',
+    checked: prefs.disableRange
+  });
+  chrome.contextMenus.create({
+    id: 'disableStream',
+    title: 'Disable Stream',
+    contexts: ['browser_action'],
+    parentId: 'options',
+    type: 'checkbox',
+    checked: prefs.disableStream
+  });
 });
 
 chrome.contextMenus.onClicked.addListener(({menuItemId, linkUrl, checked}, tab) => {
-  if (menuItemId.startsWith('dark-') || menuItemId.startsWith('light-')) {
-    chrome.storage.local.set({
-      theme: menuItemId
-    });
-  }
-  else if (menuItemId.startsWith('open-with')) {
+  if (menuItemId.startsWith('open-with')) {
     chrome.tabs.create({
       url: build(linkUrl),
       index: tab.index + 1,
@@ -199,6 +326,16 @@ chrome.contextMenus.onClicked.addListener(({menuItemId, linkUrl, checked}, tab) 
       frames: checked
     });
   }
+  else if (menuItemId.startsWith('dark-') || menuItemId.startsWith('light-')) {
+    chrome.storage.local.set({
+      theme: menuItemId
+    });
+  }
+  else {
+    chrome.storage.local.set({
+      [menuItemId]: checked
+    });
+  }
 });
 
 // browser action
@@ -206,7 +343,6 @@ chrome.browserAction.onClicked.addListener(() => chrome.tabs.create({
   url: '/data/pdf.js/web/viewer.html?file=/data/viewer/welcome.pdf'
 }));
 
-/* FAQs & Feedback */
 /* FAQs & Feedback */
 {
   const {management, runtime: {onInstalled, setUninstallURL, getManifest}, storage, tabs} = chrome;
