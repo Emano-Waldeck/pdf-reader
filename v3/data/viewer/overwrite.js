@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
       href += '#page=' + PDFViewerApplication.page;
     }
     navigator.clipboard.writeText(href).then(() => {
-      document.title = 'Done!';
+      document.title = 'Link Copied to the Clipboard!';
       setTimeout(() => {
         document.title = title;
       }, 1000);

@@ -1,8 +1,7 @@
 'use strict';
 
-self.importScripts('v2.js');
-self.importScripts('overwrite.js');
-self.importScripts('context.js');
+// self.importScripts('overwrite.js');
+// self.importScripts('context.js');
 
 const build = href => {
   if (href.indexOf('www.google.') !== -1 && href.indexOf('/url?') !== -1 && href.indexOf('&url=') !== -1) {

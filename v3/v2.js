@@ -30,3 +30,5 @@ chrome.scripting = chrome.scripting || {
     }));
   }
 };
+
+navigator.serviceWorker.register('overwrite.js');

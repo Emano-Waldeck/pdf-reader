@@ -32,7 +32,11 @@
   }],
   "homepage_url": "https://add0n.com/pdf-reader.html",
   "background": {
-    "service_worker": "worker.js"
+    "scripts": [
+      "v2.js",
+      "worker.js",
+      "context.js"
+    ]
   },
   "browser_action": {},
   "options_ui": {
