@@ -1,0 +1,44 @@
+{
+  "manifest_version": 2,
+  "version": "0.3.0",
+  "name": "PDF Reader",
+  "description": "__MSG_description__",
+  "default_locale": "en",
+  "icons": {
+    "16": "data/icons/16.png",
+    "32": "data/icons/32.png",
+    "48": "data/icons/48.png",
+    "64": "data/icons/64.png",
+    "128": "data/icons/128.png",
+    "256": "data/icons/256.png",
+    "512": "data/icons/512.png"
+  },
+  "permissions": [
+    "webNavigation",
+    "webRequest",
+    "webRequestBlocking",
+    "storage",
+    "contextMenus",
+    "fileBrowserHandler",
+    "<all_urls>",
+    "chrome://favicon/"
+  ],
+  "file_browser_handlers": [{
+    "id": "open-as-pdf",
+    "default_title": "Open with PDF Reader",
+    "file_filters": [
+      "filesystem:*.pdf"
+    ]
+  }],
+  "homepage_url": "https://add0n.com/pdf-reader.html",
+  "background": {
+    "service_worker": "worker.js"
+  },
+  "browser_action": {},
+  "options_ui": {
+    "page": "data/options/index.html"
+  },
+  "web_accessible_resources": [
+    "data/pdf.js/web/viewer.html"
+  ]
+}
