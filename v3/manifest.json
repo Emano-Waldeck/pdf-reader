@@ -1,6 +1,6 @@
 {
   "manifest_version": 2,
-  "version": "0.3.0",
+  "version": "0.3.1",
   "name": "PDF Reader",
   "description": "__MSG_description__",
   "default_locale": "en",
@@ -44,5 +44,6 @@
   },
   "web_accessible_resources": [
     "data/pdf.js/web/viewer.html"
-  ]
+  ],
+  "content_security_policy": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
 }

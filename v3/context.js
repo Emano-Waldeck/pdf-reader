@@ -34,7 +34,7 @@ const context = () => {
   });
   chrome.storage.local.get({
     'theme': 'dark-1',
-    'enableScripting': false,
+    'enableScripting': true,
     'disablePageLabels': false,
     'enablePermissions': false,
     'enablePrintAutoRotate': false,

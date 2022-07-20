@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }, 1000);
     }).catch(e => alert(e.message));
   };
-  button.classList.add('toolbarButton', 'copyLink');
+  button.classList.add('toolbarButton', 'copyLink', 'hidden');
   const span = document.createElement('span');
   span.textContent = button.title = 'Copy PDF Link';
   button.appendChild(span);
@@ -99,12 +99,26 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
+// bookmark
+document.addEventListener('DOMContentLoaded', () => {
+  const b = document.getElementById('viewBookmark');
+  b.addEventListener('click', e => {
+    const href = args.get('file').split('#')[0] + e.target.getAttribute('href');
+    navigator.clipboard.writeText(href).then(() => {
+      document.title = 'Bookmarked Link Copied to the Clipboard!';
+      setTimeout(() => {
+        document.title = title;
+      }, 1000);
+    }).catch(e => alert(e.message));
+  });
+});
+
 // preferences
 document.addEventListener('webviewerloaded', function() {
   const _initializeViewerComponents = PDFViewerApplication._initializeViewerComponents;
   PDFViewerApplication._initializeViewerComponents = async function(...args) {
     const prefs = await new Promise(resolve => chrome.storage.local.get({
-      'enableScripting': false,
+      'enableScripting': true,
       'disablePageLabels': false,
       'enablePermissions': false,
       'enablePrintAutoRotate': false,
