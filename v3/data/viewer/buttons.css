@@ -2,3 +2,8 @@
   -webkit-mask-image: url(../../viewer/copy.svg);
   mask-image: url(../../viewer/copy.svg);
 }
+
+.toolbarButton.customZoom::before {
+  -webkit-mask-image: url(../../viewer/zoom.svg);
+  mask-image: url(../../viewer/zoom.svg);
+}

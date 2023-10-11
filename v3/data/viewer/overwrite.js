@@ -99,6 +99,31 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
+// custom zoom
+document.addEventListener('DOMContentLoaded', () => {
+  const parent = document.getElementById('toolbarViewerMiddle');
+  const button = document.createElement('button');
+  button.classList.add('toolbarButton', 'customZoom');
+  const span = document.createElement('span');
+  span.textContent = button.title = 'Enter custom zooming level (Ctrl/Command + Shift + Z)';
+  button.appendChild(span);
+  button.onclick = () => {
+    const v = prompt('Enter custom zoom percent', PDFViewerApplication.pdfViewer.currentScaleValue * 100) || '';
+    if (v && isNaN(v) === false) {
+      PDFViewerApplication.pdfViewer.currentScaleValue = Number(v.replace('%', '')) / 100;
+    }
+  };
+  parent.appendChild(button);
+  document.addEventListener('keydown', e => {
+    const meta = e.metaKey || e.ctrlKey;
+    if (meta && e.shiftKey && e.code === 'KeyZ') {
+      e.stopPropagation();
+      e.preventDefault();
+      button.click();
+    }
+  });
+});
+
 // bookmark
 document.addEventListener('DOMContentLoaded', () => {
   const b = document.getElementById('viewBookmark');
