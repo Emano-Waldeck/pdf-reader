@@ -85,5 +85,5 @@ html[data-theme="dark-2"]:root {
   /* This image is used in <input> elements, which unfortunately means that
    * the `mask-image` approach used with all of the other images doesn't work
    * here; hence why we still have two versions of this particular image. */
-  --loading-icon: url(images/loading-dark.svg);
+  --loading-icon: url(images/loading.svg);
 }

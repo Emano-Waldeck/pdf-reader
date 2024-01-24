@@ -1,0 +1,66 @@
+{
+  "type": "object",
+  "properties": {
+    "guid": {
+      "title": "each update need to have a new guid",
+      "type": "string"
+    },
+    "frames": {
+      "type": "boolean"
+    },
+    "theme": {
+      "type": "string"
+    },
+    "enableScripting": {
+      "type": "boolean"
+    },
+    "disablePageLabels": {
+      "type": "boolean"
+    },
+    "enablePermissions": {
+      "type": "boolean"
+    },
+    "enablePrintAutoRotate": {
+      "type": "boolean"
+    },
+    "enableWebGL": {
+      "type": "boolean"
+    },
+    "historyUpdateUrl": {
+      "type": "boolean"
+    },
+    "ignoreDestinationZoom": {
+      "type": "boolean"
+    },
+    "pdfBugEnabled": {
+      "type": "boolean"
+    },
+    "useOnlyCssZoom": {
+      "type": "boolean"
+    },
+    "disableAutoFetch": {
+      "type": "boolean"
+    },
+    "disableFontFace": {
+      "type": "boolean"
+    },
+    "disableRange": {
+      "type": "boolean"
+    },
+    "disableStream": {
+      "type": "boolean"
+    },
+    "annotationMode": {
+      "type": "number"
+    },
+    "renderInteractiveForms": {
+      "type": "boolean"
+    },
+    "styles": {
+      "type": "string"
+    },
+    "faqs": {
+      "type": "boolean"
+    }
+  }
+}

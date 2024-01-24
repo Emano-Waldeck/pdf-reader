@@ -86,13 +86,13 @@ document.addEventListener('DOMContentLoaded', () => {
       }, 1000);
     }).catch(e => alert(e.message));
   };
-  button.classList.add('toolbarButton', 'copyLink', 'hidden');
+  button.classList.add('toolbarButton', 'hiddenMediumView', 'copyLink');
   const span = document.createElement('span');
   span.textContent = button.title = 'Copy PDF Link';
   button.appendChild(span);
-  const openFile = document.getElementById('openFile');
-  if (openFile) {
-    parent.insertBefore(button, openFile);
+  const print = document.getElementById('print');
+  if (print) {
+    parent.insertBefore(button, print);
   }
   else {
     parent.appendChild(button);
@@ -108,7 +108,8 @@ document.addEventListener('DOMContentLoaded', () => {
   span.textContent = button.title = 'Enter custom zooming level (Ctrl/Command + Shift + Z)';
   button.appendChild(span);
   button.onclick = () => {
-    const v = prompt('Enter custom zoom percent', PDFViewerApplication.pdfViewer.currentScaleValue * 100) || '';
+    const n = PDFViewerApplication.pdfViewer.currentScaleValue * 100;
+    const v = prompt('Enter custom zoom percent', isNaN(n) ? 100 : n) || '';
     if (v && isNaN(v) === false) {
       PDFViewerApplication.pdfViewer.currentScaleValue = Number(v.replace('%', '')) / 100;
     }

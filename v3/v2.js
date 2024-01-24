@@ -31,4 +31,12 @@ chrome.scripting = chrome.scripting || {
   }
 };
 
+// worker
 navigator.serviceWorker.register('overwrite.js');
+chrome.runtime.onInstalled.addListener(() => {
+  navigator.serviceWorker.getRegistration().then(registration => {
+    if (registration) {
+      registration.update();
+    }
+  });
+});

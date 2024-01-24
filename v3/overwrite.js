@@ -12,7 +12,7 @@ self.addEventListener('fetch', e => {
     }));
     e.respondWith(p);
   }
-  else if (e.request.url.endsWith('/data/pdf.js/web/viewer.js')) {
+  else if (e.request.url.endsWith('/data/pdf.js/web/viewer.mjs')) {
     const p = Promise.all([
       fetch(e.request).then(r => r.text()),
       fetch('/data/viewer/overwrite.js').then(r => r.text())
