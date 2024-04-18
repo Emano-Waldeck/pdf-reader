@@ -25,6 +25,7 @@ self.addEventListener('fetch', e => {
     e.respondWith(p);
   }
   else {
+    // console.log(e.request.url);
     e.respondWith(fetch(e.request));
   }
 });

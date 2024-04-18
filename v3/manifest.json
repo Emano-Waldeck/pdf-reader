@@ -1,6 +1,6 @@
 {
-  "manifest_version": 2,
-  "version": "0.3.3",
+  "manifest_version": 3,
+  "version": "0.4.0",
   "name": "PDF Reader",
   "description": "__MSG_description__",
   "default_locale": "en",
@@ -14,40 +14,43 @@
     "512": "/data/icons/512.png"
   },
   "permissions": [
-    "webNavigation",
-    "webRequest",
-    "webRequestBlocking",
     "storage",
     "contextMenus",
-    "fileBrowserHandler",
-    "<all_urls>",
-    "chrome://favicon/"
+    "favicon"
   ],
-  "file_browser_handlers": [{
-    "id": "open-as-pdf",
-    "default_title": "Open with PDF Reader",
-    "file_filters": [
-      "filesystem:*.pdf"
-    ]
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "file_handlers": [{
+    "action": "/data/pdf.js/web/viewer.html?context=explorer",
+    "name": "Open with PDF Reader",
+    "accept": {
+      "application/pdf": [".pdf"]
+    },
+    "launch_type": "multiple-clients"
   }],
   "storage": {
     "managed_schema": "schema.json"
   },
-  "homepage_url": "https://add0n.com/pdf-reader.html",
+  "homepage_url": "https://webextension.org/listing/pdf-reader.html",
   "background": {
-    "scripts": [
-      "v2.js",
-      "worker.js",
-      "context.js",
-      "managed.js"
-    ]
+    "service_worker": "worker.js"
   },
-  "browser_action": {},
+  "action": {},
   "options_ui": {
     "page": "/data/options/index.html"
   },
-  "web_accessible_resources": [
-    "/data/pdf.js/web/viewer.html"
-  ],
-  "content_security_policy": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
+  "web_accessible_resources": [{
+    "resources": ["/data/pdf.js/web/viewer.html"],
+    "matches": ["*://*/*"]
+  }],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
+  },
+  "content_scripts": [{
+    "matches": ["<all_urls>"],
+    "js": ["/data/watch.js"],
+    "run_at": "document_start",
+    "all_frames": true
+  }]
 }

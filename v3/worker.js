@@ -1,120 +1,15 @@
 'use strict';
 
-// self.importScripts('overwrite.js');
-// self.importScripts('context.js');
+self.importScripts('overwrite.js');
+self.importScripts('context.js', 'managed.js');
 
-const build = href => {
-  if (href.indexOf('www.google.') !== -1 && href.indexOf('/url?') !== -1 && href.indexOf('&url=') !== -1) {
-    href = decodeURIComponent(href.split('&url=')[1].split('&')[0]);
-  }
-  // const splitter = href.indexOf('?') === -1 ? (href.indexOf('#') === -1 ? '' : '#') : '?';
-  const splitter = href.indexOf('#') === -1 ? '' : '#';
-  if (splitter) {
-    const [root, args] = href.split(splitter);
-    return chrome.runtime.getURL('/data/pdf.js/web/viewer.html') + '?file=' + encodeURIComponent(root) + splitter + args;
-  }
-  else {
-    return chrome.runtime.getURL('/data/pdf.js/web/viewer.html') + '?file=' + encodeURIComponent(href);
-  }
-};
-
-// remote sources
-const observe = ({frameId, tabId, url, method, responseHeaders}) => {
-  if (method !== 'GET') {
-    return;
-  }
-  if (url.includes('pdfjs.action=download')) {
-    return;
-  }
-
-  const name = () => {
-    const header = responseHeaders.filter(h => h.name.toLowerCase() === 'content-disposition').shift();
-    return header && /\.pdf(["']|$)/i.test(header.value);
-  };
-
-  const type = () => {
-    const header = responseHeaders.filter(h => h.name.toLowerCase() === 'content-type').shift();
-    if (header) {
-      const headerValue = header.value.toLowerCase().split(';', 1)[0].trim();
-      if (headerValue === 'application/pdf') {
-        return true;
-      }
-      if (headerValue === 'application/octet-stream') {
-        if (url.toLowerCase().indexOf('.pdf') > 0) {
-          return true;
-        }
-
-        return name();
-      }
-    }
-  };
-
-  if (type() !== true) {
-    return;
-  }
-
-  // test on embedded PDFs
-  // chrome.scripting.executeScript({
-  //   target: {
-  //     tabId,
-  //     frameIds: [frameId]
-  //   },
-  //   func: href => {
-  //     console.log(123);
-  //     location.replace(href);
-  //   },
-  //   args: [build(url)]
-  // });
-
-  return {
-    redirectUrl: build(url)
-  };
-};
-const start = () => chrome.storage.local.get({
-  frames: false
-}, prefs => {
-  const types = ['main_frame'];
-  if (prefs.frames) {
-    types.push('sub_frame');
-  }
-
-  chrome.webRequest.onHeadersReceived.removeListener(observe);
-  chrome.webRequest.onHeadersReceived.addListener(observe, {
-    urls: ['<all_urls>'],
-    types
-  }, ['responseHeaders', 'blocking']);
-});
-start();
-chrome.storage.onChanged.addListener(ps => {
-  if (ps.frames) {
-    start();
-  }
-});
-
-/* local sources */
-chrome.extension.isAllowedFileSchemeAccess(allow => allow && chrome.webNavigation.onBeforeNavigate.addListener(({
-  url,
-  tabId,
-  frameId
-}) => {
-  if (frameId === 0) {
-    if (url.includes('pdfjs.action=download')) {
-      return;
-    }
-    url = build(url);
-    chrome.tabs.update(tabId, {
-      url
+chrome.runtime.onMessage.addListener((request, sender) => {
+  if (request.method === 'open-viewer') {
+    chrome.tabs.update(sender.tab.id, {
+      url: request.viewer
     });
   }
-}, {
-  url: [{
-    urlPrefix: 'file://',
-    pathSuffix: '.pdf'
-  }, {
-    urlPrefix: 'file://',
-    pathSuffix: '.PDF'
-  }]
-}));
+});
 
 /* file handling */
 if (chrome.fileBrowserHandler) {
@@ -122,10 +17,12 @@ if (chrome.fileBrowserHandler) {
     if (id === 'open-as-pdf') {
       const entries = details.entries;
       for (const entry of entries) {
+        const args = new URLSearchParams();
+        args.set('file', entry.toURL());
+        args.set('context', 'explorer');
+        const url = chrome.runtime.getURL('/data/pdf.js/web/viewer.html') + '?' + args.toString();
         chrome.tabs.create({
-          url: chrome.runtime.getURL(
-            '/data/pdf.js/web/viewer.html?file=' + encodeURIComponent(entry.toURL())
-          )
+          url
         });
       }
     }

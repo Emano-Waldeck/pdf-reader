@@ -1,4 +1,4 @@
-/* globals PDFViewerApplication, PDFViewerApplicationOptions */
+/* global PDFViewerApplication, PDFViewerApplicationOptions */
 'use strict';
 
 // e.g. AcroForm
@@ -17,56 +17,119 @@
 // https://www.tecxoft.com/samples/sample01.pdf#page=1
 // form
 // http://foersom.com/net/HowTo/data/OoPdfFormExample.pdf#page=1
+// embed
+// https://pdfobject.com/examples/embed-multiple-PDFs.html
 
-const args = new URLSearchParams(location.search);
 let title;
+let href = '';
+
+const favicon = href => {
+  if (href && href.startsWith('http')) {
+    {
+      const link = document.querySelector('link[rel*="icon"]') || document.createElement('link');
+      link.type = 'image/png';
+      link.rel = 'shortcut icon';
+      link.href = `chrome-extension://${chrome.runtime.id}/_favicon/?pageUrl=${encodeURIComponent(href)}&size=32`;
+      document.head.appendChild(link);
+    }
+    // backup plan
+    const {hostname, protocol} = new URL(href);
+    if (protocol.startsWith('http')) {
+      const link = document.createElement('link');
+      link.type = 'image/x-icon';
+      link.rel = 'shortcut icon';
+      link.href = protocol + '//' + hostname + '/favicon.ico';
+      document.head.appendChild(link);
+    }
+  }
+}
+
+try {
+  PDFViewerApplication.open = new Proxy(PDFViewerApplication.open, {
+    apply(target, self, args) {
+      href = args[0]?.url || '';
+      history.replaceState('', '', '/data/pdf.js/web/viewer.html?file=' + href);
+      try {
+        favicon(href.split('#')[0]);
+      }
+      catch (e) {
+        console.error('favicon', e);
+      }
+      try {
+        const defaultViewer = document.querySelector('.defaultViewer');
+        if (defaultViewer) {
+          defaultViewer.disabled = !href || href.startsWith('/data/') || href.startsWith('blob:');
+        }
+        const copyLink = document.querySelector('.copyLink');
+        if (copyLink) {
+          copyLink.disabled = !href || href.startsWith('/data/') || href.startsWith('blob:');
+        }
+      }
+      catch (e) {
+        console.error('disabling buttons', e);
+      }
+      return Reflect.apply(target, self, args);
+    }
+  });
+}
+catch (e) {}
 
 // prevent CROS error
 delete URL.prototype.origin;
 
-// favicon
-try {
-  const href = args.get('file').split('#')[0];
-
-  // const set = (src = 'https://www.google.com/s2/favicons?sz=64&domain_url=' + href) => {
-  const set = (src = 'chrome://favicon/' + href) => {
-    const link = document.querySelector('link[rel*="icon"]') || document.createElement('link');
-    link.type = 'image/x-icon';
-    link.rel = 'shortcut icon';
-    link.href = src;
-    document.head.appendChild(link);
-  };
-
-  const {hostname, protocol} = new URL(href);
-
-  if (protocol.startsWith('http')) {
-    const favicon = protocol + '//' + hostname + '/favicon.ico';
-    fetch(favicon).then(r => {
-      set(r.ok ? favicon : undefined);
-    }).catch(() => {
-      set();
-    });
-  }
-}
-catch (e) {}
-
 // theme
 const style = document.createElement('style');
 chrome.storage.local.get({
-  theme: 'dark-1',
+  theme: 'os-theme',
   styles: ''
 }, prefs => {
+  if (prefs.theme === 'os-theme') {
+    prefs.theme = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark-1' : 'light-1';
+  }
   document.documentElement.dataset.theme = prefs.theme;
   style.textContent = prefs.styles;
   document.documentElement.appendChild(style);
 });
 chrome.storage.onChanged.addListener(ps => {
   if (ps.theme) {
-    document.documentElement.dataset.theme = ps.theme.newValue;
+    let v = ps.theme.newValue;
+    if (v === 'os-theme') {
+      v = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark-1' : 'light-1';
+    }
+    document.documentElement.dataset.theme = v;
   }
   if (ps.styles) {
     style.textContent = ps.styles.newValue;
   }
+});
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+  chrome.storage.local.get({
+    theme: 'os-theme'
+  }, prefs => {
+    if (prefs.theme === 'os-theme') {
+      document.documentElement.dataset.theme = event.matches ? 'dark-1' : 'light-1';
+    }
+  });
+});
+
+const hash = () => {
+  const e = document.getElementById('viewBookmark')?.getAttribute('href');
+  if (e) {
+    return e;
+  }
+  else if (PDFViewerApplication.page) {
+    return '#page=' + PDFViewerApplication.page;
+  }
+  return '';
+};
+const copy = content => navigator.clipboard.writeText(content).then(() => {
+  document.title = 'Copied to the Clipboard!';
+  setTimeout(() => {
+    document.title = title;
+  }, 1000);
+}).catch(e => {
+  console.error(e);
+  alert(e.message);
 });
 
 // copy link
@@ -75,20 +138,17 @@ document.addEventListener('DOMContentLoaded', () => {
   const parent = document.getElementById('toolbarViewerRight');
   const button = document.createElement('button');
   button.onclick = () => {
-    let href = args.get('file').split('#')[0];
-    if (PDFViewerApplication.page) {
-      href += '#page=' + PDFViewerApplication.page;
-    }
-    navigator.clipboard.writeText(href).then(() => {
-      document.title = 'Link Copied to the Clipboard!';
-      setTimeout(() => {
-        document.title = title;
-      }, 1000);
-    }).catch(e => alert(e.message));
+    copy(href + hash());
   };
   button.classList.add('toolbarButton', 'hiddenMediumView', 'copyLink');
+  // disable default view on unsupported formats
+  if (href) {
+    if (href.startsWith('/data/') || href.startsWith('blob:')) {
+      button.disabled = true;
+    }
+  }
   const span = document.createElement('span');
-  span.textContent = button.title = 'Copy PDF Link';
+  span.textContent = button.title = `Copy Current Page's Link`;
   button.appendChild(span);
   const print = document.getElementById('print');
   if (print) {
@@ -97,6 +157,13 @@ document.addEventListener('DOMContentLoaded', () => {
   else {
     parent.appendChild(button);
   }
+});
+// bookmark
+document.addEventListener('DOMContentLoaded', () => {
+  const b = document.getElementById('viewBookmark');
+  b.addEventListener('click', e => {
+    copy(href + hash());
+  });
 });
 
 // custom zoom
@@ -115,28 +182,52 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
   parent.appendChild(button);
-  document.addEventListener('keydown', e => {
-    const meta = e.metaKey || e.ctrlKey;
-    if (meta && e.shiftKey && e.code === 'KeyZ') {
-      e.stopPropagation();
-      e.preventDefault();
-      button.click();
-    }
-  });
 });
 
-// bookmark
+// default viewer
 document.addEventListener('DOMContentLoaded', () => {
-  const b = document.getElementById('viewBookmark');
-  b.addEventListener('click', e => {
-    const href = args.get('file').split('#')[0] + e.target.getAttribute('href');
-    navigator.clipboard.writeText(href).then(() => {
-      document.title = 'Bookmarked Link Copied to the Clipboard!';
-      setTimeout(() => {
-        document.title = title;
-      }, 1000);
-    }).catch(e => alert(e.message));
-  });
+  const parent = document.getElementById('toolbarViewerRight');
+  const button = document.createElement('button');
+  button.classList.add('toolbarButton', 'hiddenMediumView', 'defaultViewer');
+  const span = document.createElement('span');
+  span.textContent = button.title = 'Reopen with the default PDF viewer (Ctrl/Command + Shift + D)';
+  button.appendChild(span);
+  button.onclick = () => {
+    let c = href.split('#')[0];
+    c += (c.includes('?') ? '&' : '?') + 'native-view';
+    c += hash();
+
+    location.replace(c);
+  };
+  // disable default view on unsupported formats
+  if (href) {
+    if (href.startsWith('/data/') || href.startsWith('blob:')) {
+      button.disabled = true;
+    }
+  }
+
+  const print = document.getElementById('print');
+  if (print) {
+    parent.insertBefore(button, print);
+  }
+  else {
+    parent.appendChild(button);
+  }
+});
+
+// shortcut handling
+document.addEventListener('keydown', e => {
+  const meta = e.metaKey || e.ctrlKey;
+  if (meta && e.shiftKey && e.code === 'KeyD') {
+    e.stopPropagation();
+    e.preventDefault();
+    document.querySelector('button.defaultViewer').click();
+  }
+  else if (meta && e.shiftKey && e.code === 'KeyZ') {
+    e.stopPropagation();
+    e.preventDefault();
+    document.querySelector('button.customZoom').click();
+  }
 });
 
 // preferences
@@ -179,17 +270,40 @@ document.addEventListener('webviewerloaded', function() {
   };
 });
 
-// change page number
-// document.addEventListener('webviewerloaded', () => {
-//   PDFViewerApplicationOptions.set('renderInteractiveForms', true);
-//   console.log(11);
-//   PDFViewerApplication.initializedPromise.then(() => {
-//     PDFViewerApplicationOptions.set('renderInteractiveForms', true);
-//     PDFViewerApplication.eventBus.on('pagesloaded', () => {
-//       if (href.indexOf('#page=') !== -1) {
-//         const page = href.split('#page=')[1].split('&')[0];
-//         PDFViewerApplication.page = Number(page);
-//       }
-//     });
-//   });
-// });
+// try to handle PDF errors (download error for instance)
+addEventListener('unhandledrejection', e => {
+  if (e && e.reason) {
+    // if (e.reason.name === 'InvalidPDFException') {
+    console.error('PDF Error', e);
+    document.title = '[Error] ' + document.title;
+    alert(e.reason.message);
+    // }
+  }
+});
+
+// explorer
+if ('launchQueue' in window && 'files' in LaunchParams.prototype) {
+  launchQueue.setConsumer(async launchParams => {
+    // Nothing to do when the queue is empty.
+    if (!launchParams.files.length) {
+      return;
+    }
+    for (const fileHandle of launchParams.files) {
+      const file = await fileHandle.getFile();
+      if (file.type === 'application/pdf') {
+        const r = new Response(file);
+        const url = URL.createObjectURL(await r.blob());
+        await PDFViewerApplication.open({
+          url,
+          filename: file.name
+        });
+        document.title = file.name;
+        return;
+      }
+      else {
+        console.error('this file format is not supported', file.type, file);
+      }
+    }
+  });
+}
+

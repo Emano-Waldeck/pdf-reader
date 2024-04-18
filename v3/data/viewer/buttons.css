@@ -7,3 +7,17 @@
   -webkit-mask-image: url(../../viewer/zoom.svg);
   mask-image: url(../../viewer/zoom.svg);
 }
+
+.toolbarButton.defaultViewer::before {
+  -webkit-mask-image: url(../../viewer/default.svg);
+  mask-image: url(../../viewer/default.svg);
+}
+.toolbarButton:disabled {
+  pointer-events: none;
+}
+
+@media all and (min-width: 750px){
+  :root{
+    --editor-toolbar-base-offset:165px;
+  }
+}
