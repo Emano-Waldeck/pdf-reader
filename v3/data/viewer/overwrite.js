@@ -42,9 +42,9 @@ const favicon = href => {
       document.head.appendChild(link);
     }
   }
-}
+};
 
-try {
+document.addEventListener('webviewerloaded', function() {
   PDFViewerApplication.open = new Proxy(PDFViewerApplication.open, {
     apply(target, self, args) {
       href = args[0]?.url || '';
@@ -71,8 +71,7 @@ try {
       return Reflect.apply(target, self, args);
     }
   });
-}
-catch (e) {}
+});
 
 // prevent CROS error
 delete URL.prototype.origin;
@@ -128,8 +127,19 @@ const copy = content => navigator.clipboard.writeText(content).then(() => {
     document.title = title;
   }, 1000);
 }).catch(e => {
-  console.error(e);
-  alert(e.message);
+  // inside iframe
+  const storage = document.createElement('textarea');
+  storage.value = content;
+  document.documentElement.appendChild(storage);
+
+  storage.select();
+  const r = document.execCommand('copy');
+  storage.remove();
+
+  if (!r) {
+    console.error(e);
+    alert(e.message);
+  }
 });
 
 // copy link
@@ -147,6 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
       button.disabled = true;
     }
   }
+
   const span = document.createElement('span');
   span.textContent = button.title = `Copy Current Page's Link`;
   button.appendChild(span);

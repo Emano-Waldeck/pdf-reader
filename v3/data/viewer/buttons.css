@@ -1,16 +1,16 @@
 .toolbarButton.copyLink::before {
-  -webkit-mask-image: url(../../viewer/copy.svg);
-  mask-image: url(../../viewer/copy.svg);
+  -webkit-mask-image: url(/data/viewer/copy.svg);
+  mask-image: url(/data/viewer/copy.svg);
 }
 
 .toolbarButton.customZoom::before {
-  -webkit-mask-image: url(../../viewer/zoom.svg);
-  mask-image: url(../../viewer/zoom.svg);
+  -webkit-mask-image: url(/data/viewer/zoom.svg);
+  mask-image: url(/data/viewer/zoom.svg);
 }
 
 .toolbarButton.defaultViewer::before {
-  -webkit-mask-image: url(../../viewer/default.svg);
-  mask-image: url(../../viewer/default.svg);
+  -webkit-mask-image: url(/data/viewer/default.svg);
+  mask-image: url(/data/viewer/default.svg);
 }
 .toolbarButton:disabled {
   pointer-events: none;

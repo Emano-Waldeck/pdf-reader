@@ -1,33 +1,21 @@
 'use strict';
 
-self.importScripts('overwrite.js');
 self.importScripts('context.js', 'managed.js');
+
+// TO-DO: Do not overwrite viewer.html and use the following instead
+// https://www.w3docs.com/tools/code-editor/1085
+// https://www.w3docs.com/tools/code-editor/1077
+// self.importScripts('overwrite.js');
 
 chrome.runtime.onMessage.addListener((request, sender) => {
   if (request.method === 'open-viewer') {
-    chrome.tabs.update(sender.tab.id, {
-      url: request.viewer
-    });
+    if (sender.frameId === 0) {
+      chrome.tabs.update(sender.tab.id, {
+        url: request.viewer
+      });
+    }
   }
 });
-
-/* file handling */
-if (chrome.fileBrowserHandler) {
-  chrome.fileBrowserHandler.onExecute.addListener((id, details) => {
-    if (id === 'open-as-pdf') {
-      const entries = details.entries;
-      for (const entry of entries) {
-        const args = new URLSearchParams();
-        args.set('file', entry.toURL());
-        args.set('context', 'explorer');
-        const url = chrome.runtime.getURL('/data/pdf.js/web/viewer.html') + '?' + args.toString();
-        chrome.tabs.create({
-          url
-        });
-      }
-    }
-  });
-}
 
 /* action */
 chrome.action.onClicked.addListener(() => chrome.tabs.create({
@@ -48,7 +36,7 @@ chrome.action.onClicked.addListener(() => chrome.tabs.create({
         if (reason === 'install' || (prefs.faqs && reason === 'update')) {
           const doUpdate = (Date.now() - prefs['last-update']) / 1000 / 60 / 60 / 24 > 45;
           if (doUpdate && previousVersion !== version) {
-            tabs.query({active: true, currentWindow: true}, tbs => tabs.create({
+            tabs.query({active: true, lastFocusedWindow: true}, tbs => tabs.create({
               url: page + '?version=' + version + (previousVersion ? '&p=' + previousVersion : '') + '&type=' + reason,
               active: reason === 'install',
               ...(tbs && tbs.length && {index: tbs[0].index + 1})
