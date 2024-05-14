@@ -37,6 +37,7 @@ const context = () => {
     'enablePermissions': false,
     'enablePrintAutoRotate': false,
     'enableWebGL': false,
+    'disablehistory': false,
     'historyUpdateUrl': true,
     'ignoreDestinationZoom': false,
     'pdfBugEnabled': false,
@@ -45,7 +46,8 @@ const context = () => {
     'disableFontFace': false,
     'disableRange': false,
     'disableStream': false,
-    'annotationMode': 2
+    'annotationMode': 2,
+    'defaultTool': 0 // SELECT: 0, HAND: 1, ZOOM: 2,
   }, prefs => {
     chrome.contextMenus.create({
       id: 'os-theme',
@@ -70,6 +72,75 @@ const context = () => {
       parentId: 'theme',
       type: 'radio',
       checked: prefs.theme === 'light-1'
+    }, () => chrome.runtime.lastError);
+    chrome.contextMenus.create({
+      id: 'annotationMode',
+      title: 'Annotation Mode',
+      contexts: ['action', 'browser_action'],
+      parentId: 'options'
+    }, () => chrome.runtime.lastError);
+    chrome.contextMenus.create({
+      id: 'annotationMode:0',
+      title: 'Disable',
+      contexts: ['action', 'browser_action'],
+      parentId: 'annotationMode',
+      type: 'radio',
+      checked: prefs.annotationMode === 0
+    }, () => chrome.runtime.lastError);
+    chrome.contextMenus.create({
+      id: 'annotationMode:1',
+      title: 'Enable',
+      contexts: ['action', 'browser_action'],
+      parentId: 'annotationMode',
+      type: 'radio',
+      checked: prefs.annotationMode === 1
+    }, () => chrome.runtime.lastError);
+    chrome.contextMenus.create({
+      id: 'annotationMode:2',
+      title: 'Enable Forms',
+      contexts: ['action', 'browser_action'],
+      parentId: 'annotationMode',
+      type: 'radio',
+      checked: prefs.annotationMode === 2
+    }, () => chrome.runtime.lastError);
+    chrome.contextMenus.create({
+      id: 'annotationMode:3',
+      title: 'Enable Storage',
+      contexts: ['action', 'browser_action'],
+      parentId: 'annotationMode',
+      type: 'radio',
+      checked: prefs.annotationMode === 3
+    }, () => chrome.runtime.lastError);
+    chrome.contextMenus.create({
+      id: 'defaultTool',
+      title: 'Default Tool',
+      contexts: ['action', 'browser_action'],
+      parentId: 'options'
+    }, () => chrome.runtime.lastError);
+    chrome.contextMenus.create({
+      id: 'defaultTool:0',
+      title: 'SELECT',
+      contexts: ['action', 'browser_action'],
+      parentId: 'defaultTool',
+      type: 'radio',
+      checked: prefs.defaultTool === 0
+    }, () => chrome.runtime.lastError);
+    chrome.contextMenus.create({
+      id: 'defaultTool:1',
+      title: 'HAND',
+      contexts: ['action', 'browser_action'],
+      parentId: 'defaultTool',
+      type: 'radio',
+      checked: prefs.defaultTool === 1
+    }, () => chrome.runtime.lastError);
+    chrome.contextMenus.create({
+      id: 'defaultTool:2',
+      title: 'ZOOM',
+      contexts: ['action', 'browser_action'],
+      parentId: 'defaultTool',
+      type: 'radio',
+      checked: prefs.defaultTool === 2,
+      enabled: false
     }, () => chrome.runtime.lastError);
     chrome.contextMenus.create({
       id: 'enableScripting',
@@ -120,6 +191,14 @@ const context = () => {
       checked: prefs.historyUpdateUrl
     }, () => chrome.runtime.lastError);
     chrome.contextMenus.create({
+      id: 'disablehistory',
+      title: 'Disable Previous View History',
+      contexts: ['action', 'browser_action'],
+      parentId: 'options',
+      type: 'checkbox',
+      checked: prefs.disablehistory
+    }, () => chrome.runtime.lastError);
+    chrome.contextMenus.create({
       id: 'ignoreDestinationZoom',
       title: 'Ignore Destination Zoom',
       contexts: ['action', 'browser_action'],
@@ -134,44 +213,6 @@ const context = () => {
       parentId: 'options',
       type: 'checkbox',
       checked: prefs.pdfBugEnabled
-    }, () => chrome.runtime.lastError);
-    chrome.contextMenus.create({
-      id: 'annotationMode',
-      title: 'Annotation Mode',
-      contexts: ['action', 'browser_action'],
-      parentId: 'options'
-    }, () => chrome.runtime.lastError);
-    chrome.contextMenus.create({
-      id: 'annotationMode:0',
-      title: 'Disable',
-      contexts: ['action', 'browser_action'],
-      parentId: 'annotationMode',
-      type: 'radio',
-      checked: prefs.annotationMode === 0
-    }, () => chrome.runtime.lastError);
-    chrome.contextMenus.create({
-      id: 'annotationMode:1',
-      title: 'Enable',
-      contexts: ['action', 'browser_action'],
-      parentId: 'annotationMode',
-      type: 'radio',
-      checked: prefs.annotationMode === 1
-    }, () => chrome.runtime.lastError);
-    chrome.contextMenus.create({
-      id: 'annotationMode:2',
-      title: 'Enable Forms',
-      contexts: ['action', 'browser_action'],
-      parentId: 'annotationMode',
-      type: 'radio',
-      checked: prefs.annotationMode === 2
-    }, () => chrome.runtime.lastError);
-    chrome.contextMenus.create({
-      id: 'annotationMode:3',
-      title: 'Enable Storage',
-      contexts: ['action', 'browser_action'],
-      parentId: 'annotationMode',
-      type: 'radio',
-      checked: prefs.annotationMode === 3
     }, () => chrome.runtime.lastError);
     chrome.contextMenus.create({
       id: 'useOnlyCssZoom',
@@ -234,6 +275,11 @@ chrome.contextMenus.onClicked.addListener(({menuItemId, linkUrl, checked}, tab) 
   else if (menuItemId.startsWith('annotationMode')) {
     chrome.storage.local.set({
       'annotationMode': Number(menuItemId.slice(-1))
+    });
+  }
+  else if (menuItemId.startsWith('defaultTool')) {
+    chrome.storage.local.set({
+      'defaultTool': Number(menuItemId.slice(-1))
     });
   }
   else if (menuItemId === 'support-embedded-pdfs') {

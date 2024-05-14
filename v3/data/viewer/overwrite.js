@@ -1,4 +1,4 @@
-/* global PDFViewerApplication, PDFViewerApplicationOptions */
+/* global PDFViewerApplication, PDFViewerApplicationOptions, LaunchParams, launchQueue */
 'use strict';
 
 // e.g. AcroForm
@@ -23,6 +23,21 @@
 let title;
 let href = '';
 
+document.addEventListener('webviewerloaded', function() {
+  PDFViewerApplication.open = new Proxy(PDFViewerApplication.open, {
+    apply(target, self, args) {
+      document.dispatchEvent(new CustomEvent('document-open', {
+        detail: {
+          args,
+          target,
+          self
+        }
+      }));
+      return Reflect.apply(target, self, args);
+    }
+  });
+});
+
 const favicon = href => {
   if (href && href.startsWith('http')) {
     {
@@ -43,34 +58,29 @@ const favicon = href => {
     }
   }
 };
-
-document.addEventListener('webviewerloaded', function() {
-  PDFViewerApplication.open = new Proxy(PDFViewerApplication.open, {
-    apply(target, self, args) {
-      href = args[0]?.url || '';
-      history.replaceState('', '', '/data/pdf.js/web/viewer.html?file=' + href);
-      try {
-        favicon(href.split('#')[0]);
-      }
-      catch (e) {
-        console.error('favicon', e);
-      }
-      try {
-        const defaultViewer = document.querySelector('.defaultViewer');
-        if (defaultViewer) {
-          defaultViewer.disabled = !href || href.startsWith('/data/') || href.startsWith('blob:');
-        }
-        const copyLink = document.querySelector('.copyLink');
-        if (copyLink) {
-          copyLink.disabled = !href || href.startsWith('/data/') || href.startsWith('blob:');
-        }
-      }
-      catch (e) {
-        console.error('disabling buttons', e);
-      }
-      return Reflect.apply(target, self, args);
+document.addEventListener('document-open', e => {
+  const {args} = e.detail;
+  href = args[0]?.url || '';
+  history.replaceState('', '', '/data/pdf.js/web/viewer.html?file=' + href);
+  try {
+    favicon(href.split('#')[0]);
+  }
+  catch (e) {
+    console.error('favicon', e);
+  }
+  try {
+    const defaultViewer = document.querySelector('.defaultViewer');
+    if (defaultViewer) {
+      defaultViewer.disabled = !href || href.startsWith('/data/') || href.startsWith('blob:');
     }
-  });
+    const copyLink = document.querySelector('.copyLink');
+    if (copyLink) {
+      copyLink.disabled = !href || href.startsWith('/data/') || href.startsWith('blob:');
+    }
+  }
+  catch (e) {
+    console.error('disabling buttons', e);
+  }
 });
 
 // prevent CROS error
@@ -243,42 +253,68 @@ document.addEventListener('keydown', e => {
 
 // preferences
 document.addEventListener('webviewerloaded', function() {
-  const _initializeViewerComponents = PDFViewerApplication._initializeViewerComponents;
-  PDFViewerApplication._initializeViewerComponents = async function(...args) {
-    const prefs = await new Promise(resolve => chrome.storage.local.get({
-      'enableScripting': true,
-      'disablePageLabels': false,
-      'enablePermissions': false,
-      'enablePrintAutoRotate': false,
-      'enableWebGL': false,
-      'historyUpdateUrl': true,
-      'ignoreDestinationZoom': false,
-      'pdfBugEnabled': false,
-      'renderInteractiveForms': true,
-      'useOnlyCssZoom': false,
-      'disableAutoFetch': false,
-      'disableFontFace': false,
-      'disableRange': false,
-      'disableStream': false,
-      'annotationMode': 2
-    }, resolve));
+  PDFViewerApplication._initializeViewerComponents = new Proxy(PDFViewerApplication._initializeViewerComponents, {
+    apply(target, self, args) {
+      return new Promise(resolve => {
+        chrome.storage.local.get({
+          'enableScripting': true,
+          'disablePageLabels': false,
+          'enablePermissions': false,
+          'enablePrintAutoRotate': false,
+          'enableWebGL': false,
+          'historyUpdateUrl': true,
+          'disablehistory': false,
+          'ignoreDestinationZoom': false,
+          'pdfBugEnabled': false,
+          'renderInteractiveForms': true,
+          'useOnlyCssZoom': false,
+          'disableAutoFetch': false,
+          'disableFontFace': false,
+          'disableRange': false,
+          'disableStream': false,
+          'annotationMode': 2
+        }, prefs => {
+          for (const [key, value] of Object.entries(prefs)) {
+            PDFViewerApplicationOptions.set(key, value);
+          }
 
-    PDFViewerApplicationOptions.set('annotationMode', prefs.annotationMode);
-    PDFViewerApplicationOptions.set('enableScripting', prefs.enableScripting);
-    delete prefs['enableScripting'];
-    delete prefs['renderInteractiveForms'];
+          if (prefs.disablehistory) {
+            localStorage.clear();
+          }
 
-    const r = _initializeViewerComponents.apply(this, args);
-    const {pdfViewer} = this;
+          const r = Reflect.apply(target, self, args);
 
-    for (const [key, value] of Object.entries(prefs)) {
-      pdfViewer[key] = value;
+          const pdfViewer = self;
+          for (const [key, value] of Object.entries(prefs)) {
+            pdfViewer[key] = value;
+          }
+          resolve(r);
+        });
+      });
     }
+  });
+});
 
-    return r;
-    // console.log(PDFViewerApplication);
-    // console.log(PDFViewerApplicationOptions);
-  };
+// history
+document.addEventListener('document-open', function() {
+  PDFViewerApplication.pdfHistory.initialize = new Proxy(PDFViewerApplication.pdfHistory.initialize, {
+    apply(target, self, args) {
+      args[0].resetHistory = true;
+      console.log(args);
+      return Reflect.apply(target, self, args);
+    }
+  });
+}, {once: true});
+
+// default tool
+document.addEventListener('document-open', e => {
+  chrome.storage.local.get({
+    'defaultTool': 0 // SELECT: 0, HAND: 1, ZOOM: 2,
+  }, prefs => {
+    PDFViewerApplication.pdfCursorTools.switchTool(prefs['defaultTool']);
+  });
+}, {
+  once: true
 });
 
 // try to handle PDF errors (download error for instance)
