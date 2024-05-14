@@ -295,17 +295,6 @@ document.addEventListener('webviewerloaded', function() {
   });
 });
 
-// history
-document.addEventListener('document-open', function() {
-  PDFViewerApplication.pdfHistory.initialize = new Proxy(PDFViewerApplication.pdfHistory.initialize, {
-    apply(target, self, args) {
-      args[0].resetHistory = true;
-      console.log(args);
-      return Reflect.apply(target, self, args);
-    }
-  });
-}, {once: true});
-
 // default tool
 document.addEventListener('document-open', e => {
   chrome.storage.local.get({
