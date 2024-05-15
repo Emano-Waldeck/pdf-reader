@@ -272,7 +272,12 @@ document.addEventListener('webviewerloaded', function() {
           'disableFontFace': false,
           'disableRange': false,
           'disableStream': false,
-          'annotationMode': 2
+          'annotationMode': 2,
+          'defaultZoomValue': 'auto',
+          'sidebarViewOnLoad': 0, // 0 = Do not display sidebar, 1 = thumbnails, 2 = outline, 3 = attachments
+          'spreadModeOnLoad': 0, // 2: EVEN, 1: ODD, 0: NONE
+          'scrollModeOnLoad': 0, //
+          'externalLinkTarget': 1 // 1: DEFALUT, 2: BLANK, 3: PARENT, 4: TOP
         }, prefs => {
           for (const [key, value] of Object.entries(prefs)) {
             PDFViewerApplicationOptions.set(key, value);

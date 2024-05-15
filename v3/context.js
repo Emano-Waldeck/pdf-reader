@@ -47,7 +47,10 @@ const context = () => {
     'disableRange': false,
     'disableStream': false,
     'annotationMode': 2,
-    'defaultTool': 0 // SELECT: 0, HAND: 1, ZOOM: 2,
+    'defaultTool': 0, // SELECT: 0, HAND: 1, ZOOM: 2,
+    'defaultZoomValue': 'auto',
+    'spreadModeOnLoad': 0,
+    'scrollModeOnLoad': 0
   }, prefs => {
     chrome.contextMenus.create({
       id: 'os-theme',
@@ -112,6 +115,156 @@ const context = () => {
       checked: prefs.annotationMode === 3
     }, () => chrome.runtime.lastError);
     chrome.contextMenus.create({
+      id: 'sidebarViewOnLoad',
+      title: 'Sidebar Mode',
+      contexts: ['action', 'browser_action'],
+      parentId: 'options'
+    }, () => chrome.runtime.lastError);
+    chrome.contextMenus.create({
+      id: 'sidebarViewOnLoad:0',
+      title: 'Do not display sidebar',
+      contexts: ['action', 'browser_action'],
+      parentId: 'sidebarViewOnLoad',
+      type: 'radio',
+      checked: prefs.sidebarViewOnLoad === 0
+    }, () => chrome.runtime.lastError);
+    chrome.contextMenus.create({
+      id: 'sidebarViewOnLoad:1',
+      title: 'Show thumbnails',
+      contexts: ['action', 'browser_action'],
+      parentId: 'sidebarViewOnLoad',
+      type: 'radio',
+      checked: prefs.sidebarViewOnLoad === 1
+    }, () => chrome.runtime.lastError);
+    chrome.contextMenus.create({
+      id: 'sidebarViewOnLoad:2',
+      title: 'Show outline',
+      contexts: ['action', 'browser_action'],
+      parentId: 'sidebarViewOnLoad',
+      type: 'radio',
+      checked: prefs.sidebarViewOnLoad === 2
+    }, () => chrome.runtime.lastError);
+    chrome.contextMenus.create({
+      id: 'sidebarViewOnLoad:3',
+      title: 'Show attachments',
+      contexts: ['action', 'browser_action'],
+      parentId: 'sidebarViewOnLoad',
+      type: 'radio',
+      checked: prefs.sidebarViewOnLoad === 3
+    }, () => chrome.runtime.lastError);
+    chrome.contextMenus.create({
+      id: 'scrollModeOnLoad',
+      title: 'Scroll Mode',
+      contexts: ['action', 'browser_action'],
+      parentId: 'options'
+    }, () => chrome.runtime.lastError);
+    chrome.contextMenus.create({
+      id: 'externalLinkTarget',
+      title: 'External Link Target',
+      contexts: ['action', 'browser_action'],
+      parentId: 'options'
+    }, () => chrome.runtime.lastError);
+    chrome.contextMenus.create({
+      id: 'externalLinkTarget:1',
+      title: 'Default Browser Behavior',
+      contexts: ['action', 'browser_action'],
+      parentId: 'externalLinkTarget',
+      type: 'radio',
+      checked: prefs.externalLinkTarget === 1
+    }, () => chrome.runtime.lastError);
+    chrome.contextMenus.create({
+      id: 'externalLinkTarget:2',
+      title: 'Opened in a Blank Tab ',
+      contexts: ['action', 'browser_action'],
+      parentId: 'externalLinkTarget',
+      type: 'radio',
+      checked: prefs.externalLinkTarget === 2
+    }, () => chrome.runtime.lastError);
+    chrome.contextMenus.create({
+      id: 'externalLinkTarget:3',
+      title: 'Open in the Parent Window',
+      contexts: ['action', 'browser_action'],
+      parentId: 'externalLinkTarget',
+      type: 'radio',
+      checked: prefs.externalLinkTarget === 3
+    }, () => chrome.runtime.lastError);
+    chrome.contextMenus.create({
+      id: 'externalLinkTarget:4',
+      title: 'Open in the Top-Level Window',
+      contexts: ['action', 'browser_action'],
+      parentId: 'externalLinkTarget',
+      type: 'radio',
+      checked: prefs.externalLinkTarget === 4
+    }, () => chrome.runtime.lastError);
+    chrome.contextMenus.create({
+      id: 'scrollModeOnLoad',
+      title: 'Scroll Mode',
+      contexts: ['action', 'browser_action'],
+      parentId: 'options'
+    }, () => chrome.runtime.lastError);
+    chrome.contextMenus.create({
+      id: 'scrollModeOnLoad:3',
+      title: 'Page Scrolling',
+      contexts: ['action', 'browser_action'],
+      parentId: 'scrollModeOnLoad',
+      type: 'radio',
+      checked: prefs.scrollModeOnLoad === 3
+    }, () => chrome.runtime.lastError);
+    chrome.contextMenus.create({
+      id: 'scrollModeOnLoad:0',
+      title: 'Vertical Scrolling',
+      contexts: ['action', 'browser_action'],
+      parentId: 'scrollModeOnLoad',
+      type: 'radio',
+      checked: prefs.scrollModeOnLoad === 0
+    }, () => chrome.runtime.lastError);
+    chrome.contextMenus.create({
+      id: 'scrollModeOnLoad:1',
+      title: 'Horizontal Scrolling',
+      contexts: ['action', 'browser_action'],
+      parentId: 'scrollModeOnLoad',
+      type: 'radio',
+      checked: prefs.scrollModeOnLoad === 1
+    }, () => chrome.runtime.lastError);
+    chrome.contextMenus.create({
+      id: 'scrollModeOnLoad:2',
+      title: 'Wrapped Scrolling',
+      contexts: ['action', 'browser_action'],
+      parentId: 'scrollModeOnLoad',
+      type: 'radio',
+      checked: prefs.scrollModeOnLoad === 2
+    }, () => chrome.runtime.lastError);
+    chrome.contextMenus.create({
+      id: 'spreadModeOnLoad',
+      title: 'Spreads Mode',
+      contexts: ['action', 'browser_action'],
+      parentId: 'options'
+    }, () => chrome.runtime.lastError);
+    chrome.contextMenus.create({
+      id: 'spreadModeOnLoad:0',
+      title: 'No Spreads',
+      contexts: ['action', 'browser_action'],
+      parentId: 'spreadModeOnLoad',
+      type: 'radio',
+      checked: prefs.spreadModeOnLoad === 0
+    }, () => chrome.runtime.lastError);
+    chrome.contextMenus.create({
+      id: 'spreadModeOnLoad:1',
+      title: 'Odd Spreads',
+      contexts: ['action', 'browser_action'],
+      parentId: 'spreadModeOnLoad',
+      type: 'radio',
+      checked: prefs.spreadModeOnLoad === 1
+    }, () => chrome.runtime.lastError);
+    chrome.contextMenus.create({
+      id: 'spreadModeOnLoad:2',
+      title: 'Even Spreads',
+      contexts: ['action', 'browser_action'],
+      parentId: 'spreadModeOnLoad',
+      type: 'radio',
+      checked: prefs.spreadModeOnLoad === 2
+    }, () => chrome.runtime.lastError);
+    chrome.contextMenus.create({
       id: 'defaultTool',
       title: 'Default Tool',
       contexts: ['action', 'browser_action'],
@@ -141,6 +294,36 @@ const context = () => {
       type: 'radio',
       checked: prefs.defaultTool === 2,
       enabled: false
+    }, () => chrome.runtime.lastError);
+    chrome.contextMenus.create({
+      id: 'defaultZoomValue',
+      title: 'Default Zoom Value',
+      contexts: ['action', 'browser_action'],
+      parentId: 'options'
+    }, () => chrome.runtime.lastError);
+    chrome.contextMenus.create({
+      id: 'defaultZoomValue:auto',
+      title: 'Auto',
+      contexts: ['action', 'browser_action'],
+      parentId: 'defaultZoomValue',
+      type: 'radio',
+      checked: prefs.defaultZoomValue === 'auto'
+    }, () => chrome.runtime.lastError);
+    chrome.contextMenus.create({
+      id: 'defaultZoomValue:page-fit',
+      title: 'Page Fit',
+      contexts: ['action', 'browser_action'],
+      parentId: 'defaultZoomValue',
+      type: 'radio',
+      checked: prefs.defaultZoomValue === 'page-fit'
+    }, () => chrome.runtime.lastError);
+    chrome.contextMenus.create({
+      id: 'defaultZoomValue:page-width',
+      title: 'Page Width',
+      contexts: ['action', 'browser_action'],
+      parentId: 'defaultZoomValue',
+      type: 'radio',
+      checked: prefs.defaultZoomValue === 'page-width'
     }, () => chrome.runtime.lastError);
     chrome.contextMenus.create({
       id: 'enableScripting',
@@ -280,6 +463,31 @@ chrome.contextMenus.onClicked.addListener(({menuItemId, linkUrl, checked}, tab) 
   else if (menuItemId.startsWith('defaultTool')) {
     chrome.storage.local.set({
       'defaultTool': Number(menuItemId.slice(-1))
+    });
+  }
+  else if (menuItemId.startsWith('sidebarViewOnLoad')) {
+    chrome.storage.local.set({
+      'sidebarViewOnLoad': Number(menuItemId.slice(-1))
+    });
+  }
+  else if (menuItemId.startsWith('scrollModeOnLoad')) {
+    chrome.storage.local.set({
+      'scrollModeOnLoad': Number(menuItemId.slice(-1))
+    });
+  }
+  else if (menuItemId.startsWith('externalLinkTarget')) {
+    chrome.storage.local.set({
+      'externalLinkTarget': Number(menuItemId.slice(-1))
+    });
+  }
+  else if (menuItemId.startsWith('spreadModeOnLoad')) {
+    chrome.storage.local.set({
+      'spreadModeOnLoad': Number(menuItemId.slice(-1))
+    });
+  }
+  else if (menuItemId.startsWith('defaultZoomValue')) {
+    chrome.storage.local.set({
+      'defaultZoomValue': menuItemId.split(':')[1]
     });
   }
   else if (menuItemId === 'support-embedded-pdfs') {
