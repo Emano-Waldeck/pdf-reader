@@ -326,6 +326,30 @@ const context = () => {
       checked: prefs.defaultZoomValue === 'page-width'
     }, () => chrome.runtime.lastError);
     chrome.contextMenus.create({
+      id: 'defaultZoomValue:100%',
+      title: '100%',
+      contexts: ['action', 'browser_action'],
+      parentId: 'defaultZoomValue',
+      type: 'radio',
+      checked: prefs.defaultZoomValue === '100%'
+    }, () => chrome.runtime.lastError);
+    chrome.contextMenus.create({
+      id: 'defaultZoomValue:75%',
+      title: '75%',
+      contexts: ['action', 'browser_action'],
+      parentId: 'defaultZoomValue',
+      type: 'radio',
+      checked: prefs.defaultZoomValue === '75%'
+    }, () => chrome.runtime.lastError);
+    chrome.contextMenus.create({
+      id: 'defaultZoomValue:50%',
+      title: '50%',
+      contexts: ['action', 'browser_action'],
+      parentId: 'defaultZoomValue',
+      type: 'radio',
+      checked: prefs.defaultZoomValue === '50%'
+    }, () => chrome.runtime.lastError);
+    chrome.contextMenus.create({
       id: 'enableScripting',
       title: 'Enable Scripting',
       contexts: ['action', 'browser_action'],
