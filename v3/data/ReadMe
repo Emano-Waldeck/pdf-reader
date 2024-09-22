@@ -1,0 +1,8 @@
+https://github.com/mozilla/pdf.js/releases/download/v4.6.82/pdfjs-4.6.82-dist.zip
+
+adding (pdf.js/web/viewer.html):
+  <link rel="stylesheet" href="/data/viewer/buttons.css">
+  <link rel="stylesheet" href="/data/viewer/theme.css">
+
+  <script src="/data/viewer/notification-view/notification-view.js"></script>
+  <script src="/data/viewer/overwrite.js"></script>

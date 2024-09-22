@@ -1,6 +1,0 @@
-https://github.com/mozilla/pdf.js/releases/download/v4.2.67/pdfjs-4.2.67-dist.zip
-
-adding:
-  <link rel="stylesheet" href="/data/viewer/buttons.css">
-  <link rel="stylesheet" href="/data/viewer/theme.css">
-  <script src="/data/viewer/overwrite.js"></script>

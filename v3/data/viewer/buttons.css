@@ -16,8 +16,16 @@
   pointer-events: none;
 }
 
-@media all and (min-width: 750px){
-  :root{
-    --editor-toolbar-base-offset:165px;
+body {
+  --editor-toolbar-base-offset: 165px;
+}
+@media all and (max-width: 750px){
+  body {
+    --editor-toolbar-base-offset: 42px;
   }
+}
+
+notification-view {
+  --pos-top: 42px;
+  --pos-right: 22px;
 }

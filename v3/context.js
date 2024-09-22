@@ -1,4 +1,9 @@
 const context = () => {
+  if (context.done) {
+    return;
+  }
+  context.done = true;
+
   chrome.contextMenus.create({
     id: 'open-with',
     title: 'Open with PDF Reader',

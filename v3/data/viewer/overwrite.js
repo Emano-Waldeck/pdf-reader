@@ -19,9 +19,42 @@
 // http://foersom.com/net/HowTo/data/OoPdfFormExample.pdf#page=1
 // embed
 // https://pdfobject.com/examples/embed-multiple-PDFs.html
+// e.g. PDF with rendering errors
+// https://www.adobe.com/support/products/enterprise/knowledgecenter/media/c4611_sample_explain.pdf
 
-let title;
+
 let href = '';
+
+const notify = (message, title = false) => {
+  chrome.runtime.sendMessage({
+    method: 'notify',
+    message
+  });
+
+  let e = document.querySelector('notification-view');
+  if (!e) {
+    e = document.createElement('notification-view');
+    document.body.append(e);
+  }
+  e.notify(message, 'error', 2000);
+};
+
+const toast = message => {
+  if (toast.id) {
+    clearTimeout(toast.id);
+    delete toast.id;
+  }
+  else {
+    toast.title = document.title;
+  }
+  toast.title = toast.title || document.title;
+
+  document.title = message;
+  toast.id = setTimeout(() => {
+    document.title = toast.title;
+    delete toast.id;
+  }, 2000);
+};
 
 document.addEventListener('webviewerloaded', function() {
   PDFViewerApplication.open = new Proxy(PDFViewerApplication.open, {
@@ -132,10 +165,7 @@ const hash = () => {
   return '';
 };
 const copy = content => navigator.clipboard.writeText(content).then(() => {
-  document.title = 'Copied to the Clipboard!';
-  setTimeout(() => {
-    document.title = title;
-  }, 1000);
+  toast('Copied to the Clipboard!');
 }).catch(e => {
   // inside iframe
   const storage = document.createElement('textarea');
@@ -148,13 +178,13 @@ const copy = content => navigator.clipboard.writeText(content).then(() => {
 
   if (!r) {
     console.error(e);
-    alert(e.message);
+    // alert(e.message);
+    notify(e.message, false);
   }
 });
 
 // copy link
 document.addEventListener('DOMContentLoaded', () => {
-  title = document.title;
   const parent = document.getElementById('toolbarViewerRight');
   const button = document.createElement('button');
   button.onclick = () => {
@@ -315,9 +345,8 @@ document.addEventListener('document-open', e => {
 addEventListener('unhandledrejection', e => {
   if (e && e.reason) {
     // if (e.reason.name === 'InvalidPDFException') {
-    console.error('PDF Error', e);
-    document.title = '[Error] ' + document.title;
-    alert(e.reason.message);
+    console.warn('[PDF Error]', e.reason?.message);
+    notify(e.reason?.message, true);
     // }
   }
 });

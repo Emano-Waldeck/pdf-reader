@@ -15,6 +15,20 @@ chrome.runtime.onMessage.addListener((request, sender) => {
       });
     }
   }
+  else if (request.method === 'notify') {
+    chrome.action.setBadgeText({
+      text: 'E',
+      tabId: sender.tab.id
+    });
+    chrome.action.setTitle({
+      title: request.message || 'NA',
+      tabId: sender.tab.id
+    });
+    chrome.action.setBadgeBackgroundColor({
+      color: 'red',
+      tabId: sender.tab.id
+    });
+  }
 });
 
 /* action */
@@ -26,8 +40,7 @@ chrome.action.onClicked.addListener(() => chrome.tabs.create({
 {
   const {management, runtime: {onInstalled, setUninstallURL, getManifest}, storage, tabs} = chrome;
   if (navigator.webdriver !== true) {
-    const page = getManifest().homepage_url;
-    const {name, version} = getManifest();
+    const {homepage_url: page, name, version} = getManifest();
     onInstalled.addListener(({reason, previousVersion}) => {
       management.getSelf(({installType}) => installType === 'normal' && storage.local.get({
         'faqs': true,
