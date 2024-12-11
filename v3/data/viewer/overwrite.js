@@ -185,7 +185,7 @@ const copy = content => navigator.clipboard.writeText(content).then(() => {
 
 // copy link
 document.addEventListener('DOMContentLoaded', () => {
-  const parent = document.getElementById('toolbarViewerRight');
+  const parent = document.querySelector('.toolbarHorizontalGroup.hiddenMediumView');
   const button = document.createElement('button');
   button.onclick = () => {
     copy(href + hash());
@@ -201,13 +201,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const span = document.createElement('span');
   span.textContent = button.title = `Copy Current Page's Link`;
   button.appendChild(span);
-  const print = document.getElementById('print');
-  if (print) {
-    parent.insertBefore(button, print);
-  }
-  else {
-    parent.appendChild(button);
-  }
+  parent.appendChild(button);
 });
 // bookmark
 document.addEventListener('DOMContentLoaded', () => {
@@ -237,7 +231,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // default viewer
 document.addEventListener('DOMContentLoaded', () => {
-  const parent = document.getElementById('toolbarViewerRight');
+  const parent = document.querySelector('.toolbarHorizontalGroup.hiddenMediumView');
   const button = document.createElement('button');
   button.classList.add('toolbarButton', 'hiddenMediumView', 'defaultViewer');
   const span = document.createElement('span');
@@ -257,13 +251,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  const print = document.getElementById('print');
-  if (print) {
-    parent.insertBefore(button, print);
-  }
-  else {
-    parent.appendChild(button);
-  }
+  parent.appendChild(button);
 });
 
 // shortcut handling
