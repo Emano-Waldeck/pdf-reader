@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "version": "0.4.3",
-  "name": "PDF Reader",
+  "name": "PDF Reader and Editor",
   "description": "__MSG_description__",
   "default_locale": "en",
   "icons": {
@@ -52,5 +52,10 @@
     "js": ["/data/watch.js"],
     "run_at": "document_start",
     "all_frames": true
-  }]
+  }],
+  "commands": {
+    "_execute_action": {
+      "description": "Execute Action"
+    }
+  }
 }

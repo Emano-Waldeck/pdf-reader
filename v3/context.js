@@ -21,19 +21,19 @@ const context = () => {
   }, prefs => chrome.contextMenus.create({
     id: 'support-embedded-pdfs',
     title: 'Support embedded PDFs',
-    contexts: ['action', 'browser_action'],
+    contexts: ['action'],
     type: 'checkbox',
     checked: prefs.frames
   }, () => chrome.runtime.lastError));
   chrome.contextMenus.create({
     id: 'theme',
     title: 'Themes',
-    contexts: ['action', 'browser_action']
+    contexts: ['action']
   }, () => chrome.runtime.lastError);
   chrome.contextMenus.create({
     id: 'options',
     title: 'Rendering Options',
-    contexts: ['action', 'browser_action']
+    contexts: ['action']
   }, () => chrome.runtime.lastError);
   chrome.storage.local.get({
     'theme': 'os-theme',
@@ -60,7 +60,7 @@ const context = () => {
     chrome.contextMenus.create({
       id: 'os-theme',
       title: 'OS Theme',
-      contexts: ['action', 'browser_action'],
+      contexts: ['action'],
       parentId: 'theme',
       type: 'radio',
       checked: prefs.theme === 'os-theme'
@@ -68,7 +68,7 @@ const context = () => {
     chrome.contextMenus.create({
       id: 'dark-1',
       title: 'Dark Theme',
-      contexts: ['action', 'browser_action'],
+      contexts: ['action'],
       parentId: 'theme',
       type: 'radio',
       checked: prefs.theme === 'dark-1'
@@ -76,7 +76,7 @@ const context = () => {
     chrome.contextMenus.create({
       id: 'light-1',
       title: 'Light Theme',
-      contexts: ['action', 'browser_action'],
+      contexts: ['action'],
       parentId: 'theme',
       type: 'radio',
       checked: prefs.theme === 'light-1'
@@ -84,13 +84,13 @@ const context = () => {
     chrome.contextMenus.create({
       id: 'annotationMode',
       title: 'Annotation Mode',
-      contexts: ['action', 'browser_action'],
+      contexts: ['action'],
       parentId: 'options'
     }, () => chrome.runtime.lastError);
     chrome.contextMenus.create({
       id: 'annotationMode:0',
       title: 'Disable',
-      contexts: ['action', 'browser_action'],
+      contexts: ['action'],
       parentId: 'annotationMode',
       type: 'radio',
       checked: prefs.annotationMode === 0
@@ -98,7 +98,7 @@ const context = () => {
     chrome.contextMenus.create({
       id: 'annotationMode:1',
       title: 'Enable',
-      contexts: ['action', 'browser_action'],
+      contexts: ['action'],
       parentId: 'annotationMode',
       type: 'radio',
       checked: prefs.annotationMode === 1
@@ -106,7 +106,7 @@ const context = () => {
     chrome.contextMenus.create({
       id: 'annotationMode:2',
       title: 'Enable Forms',
-      contexts: ['action', 'browser_action'],
+      contexts: ['action'],
       parentId: 'annotationMode',
       type: 'radio',
       checked: prefs.annotationMode === 2
@@ -114,7 +114,7 @@ const context = () => {
     chrome.contextMenus.create({
       id: 'annotationMode:3',
       title: 'Enable Storage',
-      contexts: ['action', 'browser_action'],
+      contexts: ['action'],
       parentId: 'annotationMode',
       type: 'radio',
       checked: prefs.annotationMode === 3
@@ -122,13 +122,13 @@ const context = () => {
     chrome.contextMenus.create({
       id: 'sidebarViewOnLoad',
       title: 'Sidebar Mode',
-      contexts: ['action', 'browser_action'],
+      contexts: ['action'],
       parentId: 'options'
     }, () => chrome.runtime.lastError);
     chrome.contextMenus.create({
       id: 'sidebarViewOnLoad:0',
       title: 'Do not display sidebar',
-      contexts: ['action', 'browser_action'],
+      contexts: ['action'],
       parentId: 'sidebarViewOnLoad',
       type: 'radio',
       checked: prefs.sidebarViewOnLoad === 0
@@ -136,7 +136,7 @@ const context = () => {
     chrome.contextMenus.create({
       id: 'sidebarViewOnLoad:1',
       title: 'Show thumbnails',
-      contexts: ['action', 'browser_action'],
+      contexts: ['action'],
       parentId: 'sidebarViewOnLoad',
       type: 'radio',
       checked: prefs.sidebarViewOnLoad === 1
@@ -144,7 +144,7 @@ const context = () => {
     chrome.contextMenus.create({
       id: 'sidebarViewOnLoad:2',
       title: 'Show outline',
-      contexts: ['action', 'browser_action'],
+      contexts: ['action'],
       parentId: 'sidebarViewOnLoad',
       type: 'radio',
       checked: prefs.sidebarViewOnLoad === 2
@@ -152,7 +152,7 @@ const context = () => {
     chrome.contextMenus.create({
       id: 'sidebarViewOnLoad:3',
       title: 'Show attachments',
-      contexts: ['action', 'browser_action'],
+      contexts: ['action'],
       parentId: 'sidebarViewOnLoad',
       type: 'radio',
       checked: prefs.sidebarViewOnLoad === 3
@@ -160,19 +160,19 @@ const context = () => {
     chrome.contextMenus.create({
       id: 'scrollModeOnLoad',
       title: 'Scroll Mode',
-      contexts: ['action', 'browser_action'],
+      contexts: ['action'],
       parentId: 'options'
     }, () => chrome.runtime.lastError);
     chrome.contextMenus.create({
       id: 'externalLinkTarget',
       title: 'External Link Target',
-      contexts: ['action', 'browser_action'],
+      contexts: ['action'],
       parentId: 'options'
     }, () => chrome.runtime.lastError);
     chrome.contextMenus.create({
       id: 'externalLinkTarget:1',
       title: 'Default Browser Behavior',
-      contexts: ['action', 'browser_action'],
+      contexts: ['action'],
       parentId: 'externalLinkTarget',
       type: 'radio',
       checked: prefs.externalLinkTarget === 1
@@ -180,7 +180,7 @@ const context = () => {
     chrome.contextMenus.create({
       id: 'externalLinkTarget:2',
       title: 'Opened in a Blank Tab ',
-      contexts: ['action', 'browser_action'],
+      contexts: ['action'],
       parentId: 'externalLinkTarget',
       type: 'radio',
       checked: prefs.externalLinkTarget === 2
@@ -188,7 +188,7 @@ const context = () => {
     chrome.contextMenus.create({
       id: 'externalLinkTarget:3',
       title: 'Open in the Parent Window',
-      contexts: ['action', 'browser_action'],
+      contexts: ['action'],
       parentId: 'externalLinkTarget',
       type: 'radio',
       checked: prefs.externalLinkTarget === 3
@@ -196,7 +196,7 @@ const context = () => {
     chrome.contextMenus.create({
       id: 'externalLinkTarget:4',
       title: 'Open in the Top-Level Window',
-      contexts: ['action', 'browser_action'],
+      contexts: ['action'],
       parentId: 'externalLinkTarget',
       type: 'radio',
       checked: prefs.externalLinkTarget === 4
@@ -204,13 +204,13 @@ const context = () => {
     chrome.contextMenus.create({
       id: 'scrollModeOnLoad',
       title: 'Scroll Mode',
-      contexts: ['action', 'browser_action'],
+      contexts: ['action'],
       parentId: 'options'
     }, () => chrome.runtime.lastError);
     chrome.contextMenus.create({
       id: 'scrollModeOnLoad:3',
       title: 'Page Scrolling',
-      contexts: ['action', 'browser_action'],
+      contexts: ['action'],
       parentId: 'scrollModeOnLoad',
       type: 'radio',
       checked: prefs.scrollModeOnLoad === 3
@@ -218,7 +218,7 @@ const context = () => {
     chrome.contextMenus.create({
       id: 'scrollModeOnLoad:0',
       title: 'Vertical Scrolling',
-      contexts: ['action', 'browser_action'],
+      contexts: ['action'],
       parentId: 'scrollModeOnLoad',
       type: 'radio',
       checked: prefs.scrollModeOnLoad === 0
@@ -226,7 +226,7 @@ const context = () => {
     chrome.contextMenus.create({
       id: 'scrollModeOnLoad:1',
       title: 'Horizontal Scrolling',
-      contexts: ['action', 'browser_action'],
+      contexts: ['action'],
       parentId: 'scrollModeOnLoad',
       type: 'radio',
       checked: prefs.scrollModeOnLoad === 1
@@ -234,7 +234,7 @@ const context = () => {
     chrome.contextMenus.create({
       id: 'scrollModeOnLoad:2',
       title: 'Wrapped Scrolling',
-      contexts: ['action', 'browser_action'],
+      contexts: ['action'],
       parentId: 'scrollModeOnLoad',
       type: 'radio',
       checked: prefs.scrollModeOnLoad === 2
@@ -242,13 +242,13 @@ const context = () => {
     chrome.contextMenus.create({
       id: 'spreadModeOnLoad',
       title: 'Spreads Mode',
-      contexts: ['action', 'browser_action'],
+      contexts: ['action'],
       parentId: 'options'
     }, () => chrome.runtime.lastError);
     chrome.contextMenus.create({
       id: 'spreadModeOnLoad:0',
       title: 'No Spreads',
-      contexts: ['action', 'browser_action'],
+      contexts: ['action'],
       parentId: 'spreadModeOnLoad',
       type: 'radio',
       checked: prefs.spreadModeOnLoad === 0
@@ -256,7 +256,7 @@ const context = () => {
     chrome.contextMenus.create({
       id: 'spreadModeOnLoad:1',
       title: 'Odd Spreads',
-      contexts: ['action', 'browser_action'],
+      contexts: ['action'],
       parentId: 'spreadModeOnLoad',
       type: 'radio',
       checked: prefs.spreadModeOnLoad === 1
@@ -264,7 +264,7 @@ const context = () => {
     chrome.contextMenus.create({
       id: 'spreadModeOnLoad:2',
       title: 'Even Spreads',
-      contexts: ['action', 'browser_action'],
+      contexts: ['action'],
       parentId: 'spreadModeOnLoad',
       type: 'radio',
       checked: prefs.spreadModeOnLoad === 2
@@ -272,13 +272,13 @@ const context = () => {
     chrome.contextMenus.create({
       id: 'defaultTool',
       title: 'Default Tool',
-      contexts: ['action', 'browser_action'],
+      contexts: ['action'],
       parentId: 'options'
     }, () => chrome.runtime.lastError);
     chrome.contextMenus.create({
       id: 'defaultTool:0',
       title: 'SELECT',
-      contexts: ['action', 'browser_action'],
+      contexts: ['action'],
       parentId: 'defaultTool',
       type: 'radio',
       checked: prefs.defaultTool === 0
@@ -286,7 +286,7 @@ const context = () => {
     chrome.contextMenus.create({
       id: 'defaultTool:1',
       title: 'HAND',
-      contexts: ['action', 'browser_action'],
+      contexts: ['action'],
       parentId: 'defaultTool',
       type: 'radio',
       checked: prefs.defaultTool === 1
@@ -294,7 +294,7 @@ const context = () => {
     chrome.contextMenus.create({
       id: 'defaultTool:2',
       title: 'ZOOM',
-      contexts: ['action', 'browser_action'],
+      contexts: ['action'],
       parentId: 'defaultTool',
       type: 'radio',
       checked: prefs.defaultTool === 2,
@@ -303,13 +303,13 @@ const context = () => {
     chrome.contextMenus.create({
       id: 'defaultZoomValue',
       title: 'Default Zoom Value',
-      contexts: ['action', 'browser_action'],
+      contexts: ['action'],
       parentId: 'options'
     }, () => chrome.runtime.lastError);
     chrome.contextMenus.create({
       id: 'defaultZoomValue:auto',
       title: 'Auto',
-      contexts: ['action', 'browser_action'],
+      contexts: ['action'],
       parentId: 'defaultZoomValue',
       type: 'radio',
       checked: prefs.defaultZoomValue === 'auto'
@@ -317,7 +317,7 @@ const context = () => {
     chrome.contextMenus.create({
       id: 'defaultZoomValue:page-fit',
       title: 'Page Fit',
-      contexts: ['action', 'browser_action'],
+      contexts: ['action'],
       parentId: 'defaultZoomValue',
       type: 'radio',
       checked: prefs.defaultZoomValue === 'page-fit'
@@ -325,7 +325,7 @@ const context = () => {
     chrome.contextMenus.create({
       id: 'defaultZoomValue:page-width',
       title: 'Page Width',
-      contexts: ['action', 'browser_action'],
+      contexts: ['action'],
       parentId: 'defaultZoomValue',
       type: 'radio',
       checked: prefs.defaultZoomValue === 'page-width'
@@ -333,7 +333,7 @@ const context = () => {
     chrome.contextMenus.create({
       id: 'defaultZoomValue:100%',
       title: '100%',
-      contexts: ['action', 'browser_action'],
+      contexts: ['action'],
       parentId: 'defaultZoomValue',
       type: 'radio',
       checked: prefs.defaultZoomValue === '100%'
@@ -341,7 +341,7 @@ const context = () => {
     chrome.contextMenus.create({
       id: 'defaultZoomValue:75%',
       title: '75%',
-      contexts: ['action', 'browser_action'],
+      contexts: ['action'],
       parentId: 'defaultZoomValue',
       type: 'radio',
       checked: prefs.defaultZoomValue === '75%'
@@ -349,7 +349,7 @@ const context = () => {
     chrome.contextMenus.create({
       id: 'defaultZoomValue:50%',
       title: '50%',
-      contexts: ['action', 'browser_action'],
+      contexts: ['action'],
       parentId: 'defaultZoomValue',
       type: 'radio',
       checked: prefs.defaultZoomValue === '50%'
@@ -357,7 +357,7 @@ const context = () => {
     chrome.contextMenus.create({
       id: 'enableScripting',
       title: 'Enable Scripting',
-      contexts: ['action', 'browser_action'],
+      contexts: ['action'],
       parentId: 'options',
       type: 'checkbox',
       checked: prefs.enableScripting
@@ -365,7 +365,7 @@ const context = () => {
     chrome.contextMenus.create({
       id: 'disablePageLabels',
       title: 'Disable Page Labels',
-      contexts: ['action', 'browser_action'],
+      contexts: ['action'],
       parentId: 'options',
       type: 'checkbox',
       checked: prefs.disablePageLabels
@@ -373,7 +373,7 @@ const context = () => {
     chrome.contextMenus.create({
       id: 'enablePermissions',
       title: 'Enable Permissions',
-      contexts: ['action', 'browser_action'],
+      contexts: ['action'],
       parentId: 'options',
       type: 'checkbox',
       checked: prefs.enablePermissions
@@ -381,7 +381,7 @@ const context = () => {
     chrome.contextMenus.create({
       id: 'enablePrintAutoRotate',
       title: 'Enable Print Auto-Rotate',
-      contexts: ['action', 'browser_action'],
+      contexts: ['action'],
       parentId: 'options',
       type: 'checkbox',
       checked: prefs.enablePrintAutoRotate
@@ -389,7 +389,7 @@ const context = () => {
     chrome.contextMenus.create({
       id: 'enableWebGL',
       title: 'Enable WebGL',
-      contexts: ['action', 'browser_action'],
+      contexts: ['action'],
       parentId: 'options',
       type: 'checkbox',
       checked: prefs.enableWebGL
@@ -397,7 +397,7 @@ const context = () => {
     chrome.contextMenus.create({
       id: 'historyUpdateUrl',
       title: 'History Update URL',
-      contexts: ['action', 'browser_action'],
+      contexts: ['action'],
       parentId: 'options',
       type: 'checkbox',
       checked: prefs.historyUpdateUrl
@@ -405,7 +405,7 @@ const context = () => {
     chrome.contextMenus.create({
       id: 'disablehistory',
       title: 'Disable Previous View History',
-      contexts: ['action', 'browser_action'],
+      contexts: ['action'],
       parentId: 'options',
       type: 'checkbox',
       checked: prefs.disablehistory
@@ -413,7 +413,7 @@ const context = () => {
     chrome.contextMenus.create({
       id: 'ignoreDestinationZoom',
       title: 'Ignore Destination Zoom',
-      contexts: ['action', 'browser_action'],
+      contexts: ['action'],
       parentId: 'options',
       type: 'checkbox',
       checked: prefs.ignoreDestinationZoom
@@ -421,7 +421,7 @@ const context = () => {
     chrome.contextMenus.create({
       id: 'pdfBugEnabled',
       title: 'PDF Bug Enabled',
-      contexts: ['action', 'browser_action'],
+      contexts: ['action'],
       parentId: 'options',
       type: 'checkbox',
       checked: prefs.pdfBugEnabled
@@ -429,7 +429,7 @@ const context = () => {
     chrome.contextMenus.create({
       id: 'useOnlyCssZoom',
       title: 'Use Only CSS Zoom',
-      contexts: ['action', 'browser_action'],
+      contexts: ['action'],
       parentId: 'options',
       type: 'checkbox',
       checked: prefs.useOnlyCssZoom
@@ -437,7 +437,7 @@ const context = () => {
     chrome.contextMenus.create({
       id: 'disableAutoFetch',
       title: 'Disable Auto Fetch',
-      contexts: ['action', 'browser_action'],
+      contexts: ['action'],
       parentId: 'options',
       type: 'checkbox',
       checked: prefs.disableAutoFetch
@@ -445,7 +445,7 @@ const context = () => {
     chrome.contextMenus.create({
       id: 'disableFontFace',
       title: 'Disable Font Face',
-      contexts: ['action', 'browser_action'],
+      contexts: ['action'],
       parentId: 'options',
       type: 'checkbox',
       checked: prefs.disableFontFace
@@ -453,7 +453,7 @@ const context = () => {
     chrome.contextMenus.create({
       id: 'disableRange',
       title: 'Disable Range',
-      contexts: ['action', 'browser_action'],
+      contexts: ['action'],
       parentId: 'options',
       type: 'checkbox',
       checked: prefs.disableRange
@@ -461,7 +461,7 @@ const context = () => {
     chrome.contextMenus.create({
       id: 'disableStream',
       title: 'Disable Stream',
-      contexts: ['action', 'browser_action'],
+      contexts: ['action'],
       parentId: 'options',
       type: 'checkbox',
       checked: prefs.disableStream
