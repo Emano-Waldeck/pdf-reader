@@ -1,17 +1,17 @@
 {
   "manifest_version": 3,
-  "version": "0.4.3",
+  "version": "0.4.4",
   "name": "PDF Reader and Editor",
   "description": "__MSG_description__",
   "default_locale": "en",
   "icons": {
-    "16": "/data/icons/16.png",
-    "32": "/data/icons/32.png",
-    "48": "/data/icons/48.png",
-    "64": "/data/icons/64.png",
-    "128": "/data/icons/128.png",
-    "256": "/data/icons/256.png",
-    "512": "/data/icons/512.png"
+    "16": "data/icons/16.png",
+    "32": "data/icons/32.png",
+    "48": "data/icons/48.png",
+    "64": "data/icons/64.png",
+    "128": "data/icons/128.png",
+    "256": "data/icons/256.png",
+    "512": "data/icons/512.png"
   },
   "permissions": [
     "storage",
@@ -22,7 +22,7 @@
     "<all_urls>"
   ],
   "file_handlers": [{
-    "action": "/data/pdf.js/web/viewer.html?context=explorer",
+    "action": "data/pdf.js/web/viewer.html?context=explorer",
     "name": "Open with PDF Reader",
     "accept": {
       "application/pdf": [".pdf"]
@@ -38,10 +38,10 @@
   },
   "action": {},
   "options_ui": {
-    "page": "/data/options/index.html"
+    "page": "data/options/index.html"
   },
   "web_accessible_resources": [{
-    "resources": ["/data/pdf.js/web/viewer.html"],
+    "resources": ["data/pdf.js/web/viewer.html"],
     "matches": ["*://*/*"]
   }],
   "content_security_policy": {
@@ -49,7 +49,7 @@
   },
   "content_scripts": [{
     "matches": ["<all_urls>"],
-    "js": ["/data/watch.js"],
+    "js": ["data/watch.js"],
     "run_at": "document_start",
     "all_frames": true
   }],
