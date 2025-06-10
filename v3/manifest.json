@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "version": "0.4.4",
+  "version": "0.4.4.1",
   "name": "PDF Reader and Editor",
   "description": "__MSG_description__",
   "default_locale": "en",
@@ -22,7 +22,7 @@
     "<all_urls>"
   ],
   "file_handlers": [{
-    "action": "data/pdf.js/web/viewer.html?context=explorer",
+    "action": "/data/pdf.js/web/viewer.html?context=explorer",
     "name": "Open with PDF Reader",
     "accept": {
       "application/pdf": [".pdf"]
