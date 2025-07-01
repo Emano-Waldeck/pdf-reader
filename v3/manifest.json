@@ -16,7 +16,9 @@
   "permissions": [
     "storage",
     "contextMenus",
-    "favicon"
+    "favicon",
+    "scripting",
+    "webNavigation"
   ],
   "host_permissions": [
     "<all_urls>"
