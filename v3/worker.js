@@ -7,6 +7,18 @@ self.importScripts('context.js', 'managed.js');
 // https://www.w3docs.com/tools/code-editor/1077
 // self.importScripts('overwrite.js');
 
+chrome.webNavigation.onCommitted.addListener((details) => {
+  if (details.url.startsWith('blob:')) {
+    chrome.scripting.executeScript({
+      target: {
+        tabId: details.tabId,
+        frameIds: [details.frameId]
+      },
+      files: ['data/watch.js']
+    });
+  }
+});
+
 chrome.runtime.onMessage.addListener((request, sender) => {
   if (request.method === 'open-viewer') {
     if (sender.frameId === 0) {
