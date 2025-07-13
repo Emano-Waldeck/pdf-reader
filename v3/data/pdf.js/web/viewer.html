@@ -32,15 +32,20 @@ See https://github.com/adobe-type-tools/cmap-resources
 <script src="../build/pdf.mjs" type="module"></script>
 
     <link rel="stylesheet" href="viewer.css">
-    <link rel="stylesheet" href="/data/viewer/buttons.css">
-    <link rel="stylesheet" href="/data/viewer/theme.css">
 
-  <script src="viewer.mjs" type="module"></script>
+
+  <link rel="stylesheet" href="/data/viewer/buttons.css">
+  <link rel="stylesheet" href="/data/viewer/theme.css">
+
   <script src="/data/viewer/notification-view/notification-view.js"></script>
   <script src="/data/viewer/overwrite.js"></script>
+
+
+  <script src="viewer.mjs" type="module"></script>
   </head>
 
   <body tabindex="0">
+    <span id="viewer-alert" class="visuallyHidden" role="alert"></span>
     <div id="outerContainer">
 
       <div id="sidebarContainer">
@@ -661,7 +666,7 @@ See https://github.com/adobe-type-tools/cmap-resources
                   <button id="clearSignatureButton" type="button" data-l10n-id="pdfjs-editor-add-signature-clear-button" tabindex="0"><span data-l10n-id="pdfjs-editor-add-signature-clear-button-label"></span></button>
                 </div>
                 <div id="addSignatureSaveContainer">
-                  <input type="checkbox" id="addSignatureSaveCheckbox" checked="true"></input>
+                  <input type="checkbox" id="addSignatureSaveCheckbox"></input>
                   <label for="addSignatureSaveCheckbox" data-l10n-id="pdfjs-editor-add-signature-save-checkbox"></label>
                   <span></span>
                   <span id="addSignatureSaveWarning" data-l10n-id="pdfjs-editor-add-signature-save-warning-message"></span>
