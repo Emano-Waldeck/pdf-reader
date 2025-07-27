@@ -1,4 +1,4 @@
-https://github.com/mozilla/pdf.js/releases/download/v5.2.133/pdfjs-5.2.133-dist.zip
+https://github.com/mozilla/pdf.js/releases/download/v5.3.93/pdfjs-5.3.93-dist.zip
 
 adding (pdf.js/web/viewer.html):
   <link rel="stylesheet" href="/data/viewer/buttons.css">
