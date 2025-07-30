@@ -22,8 +22,9 @@
 // e.g. PDF with rendering errors
 // https://www.adobe.com/support/products/enterprise/knowledgecenter/media/c4611_sample_explain.pdf
 
-
 let href = '';
+// read meta before URL is changed;
+const meta = new URLSearchParams(location.search);
 
 const notify = (message, type = 'error', timeout = 3000) => {
   let e = document.querySelector('notification-view');
@@ -44,6 +45,12 @@ document.addEventListener('webviewerloaded', function() {
           self
         }
       }));
+
+      // rename PDF
+      if (meta.has('name')) {
+        args[0].originalUrl = meta.get('name');
+      }
+
       return Reflect.apply(target, self, args);
     }
   });
@@ -245,6 +252,16 @@ document.addEventListener('keydown', e => {
     e.preventDefault();
     document.querySelector('button.customZoom').click();
   }
+  else if (meta && e.shiftKey && e.code === 'KeyC') {
+    e.stopPropagation();
+    e.preventDefault();
+    document.querySelector('button.cutButton').click();
+  }
+  else if (meta && e.shiftKey && e.code === 'KeyR') {
+    e.stopPropagation();
+    e.preventDefault();
+    document.querySelector('button.cropButton').click();
+  }
 });
 
 // preferences
@@ -331,7 +348,7 @@ if ('launchQueue' in window && 'files' in LaunchParams.prototype) {
         const url = URL.createObjectURL(await r.blob());
         await PDFViewerApplication.open({
           url,
-          filename: file.name
+          originalUrl: file.name
         });
         document.title = file.name;
         return;

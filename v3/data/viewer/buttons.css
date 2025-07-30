@@ -3,6 +3,16 @@
   mask-image: url(/data/viewer/copy.svg);
 }
 
+.toolbarButton.cropButton::before {
+  -webkit-mask-image: url(/data/viewer/crop.svg);
+  mask-image: url(/data/viewer/crop.svg);
+}
+
+.toolbarButton.cutButton::before {
+  -webkit-mask-image: url(/data/viewer/cut.svg);
+  mask-image: url(/data/viewer/cut.svg);
+}
+
 .toolbarButton.customZoom::before {
   -webkit-mask-image: url(/data/viewer/zoom.svg);
   mask-image: url(/data/viewer/zoom.svg);

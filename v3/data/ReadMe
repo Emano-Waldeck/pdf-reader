@@ -3,6 +3,12 @@ https://github.com/mozilla/pdf.js/releases/download/v5.3.93/pdfjs-5.3.93-dist.zi
 adding (pdf.js/web/viewer.html):
   <link rel="stylesheet" href="/data/viewer/buttons.css">
   <link rel="stylesheet" href="/data/viewer/theme.css">
+  <link rel="stylesheet" href="/data/viewer/crop/inject.css">
 
   <script src="/data/viewer/notification-view/notification-view.js"></script>
   <script src="/data/viewer/overwrite.js"></script>
+  <script src="/data/viewer/crop/button.js"></script>
+  <script src="/data/viewer/cut/button.js"></script>
+
+
+https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.esm.js
