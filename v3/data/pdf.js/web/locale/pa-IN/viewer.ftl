@@ -112,14 +112,6 @@ pdfjs-document-properties-size-kb = { NUMBER($kb, maximumSignificantDigits: 3) }
 #   $mb (Number) - the PDF file size in megabytes
 #   $b (Number) - the PDF file size in bytes
 pdfjs-document-properties-size-mb = { NUMBER($mb, maximumSignificantDigits: 3) } MB ({ $b } ਬਾਈਟ)
-# Variables:
-#   $size_kb (Number) - the PDF file size in kilobytes
-#   $size_b (Number) - the PDF file size in bytes
-pdfjs-document-properties-kb = { $size_kb } KB ({ $size_b } ਬਾਈਟ)
-# Variables:
-#   $size_mb (Number) - the PDF file size in megabytes
-#   $size_b (Number) - the PDF file size in bytes
-pdfjs-document-properties-mb = { $size_mb } MB ({ $size_b } ਬਾਈਟ)
 pdfjs-document-properties-title = ਟਾਈਟਲ:
 pdfjs-document-properties-author = ਲੇਖਕ:
 pdfjs-document-properties-subject = ਵਿਸ਼ਾ:
@@ -129,10 +121,6 @@ pdfjs-document-properties-modification-date = ਸੋਧ ਦੀ ਮਿਤੀ:
 # Variables:
 #   $dateObj (Date) - the creation/modification date and time of the PDF file
 pdfjs-document-properties-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
-# Variables:
-#   $date (Date) - the creation/modification date of the PDF file
-#   $time (Time) - the creation/modification time of the PDF file
-pdfjs-document-properties-date-string = { $date }, { $time }
 pdfjs-document-properties-creator = ਨਿਰਮਾਤਾ:
 pdfjs-document-properties-producer = PDF ਪ੍ਰੋਡਿਊਸਰ:
 pdfjs-document-properties-version = PDF ਵਰਜਨ:
@@ -275,10 +263,6 @@ pdfjs-rendering-error = ਸਫ਼ਾ ਰੈਡਰ ਕਰਨ ਦੇ ਦੌਰਾ�
 
 ## Annotations
 
-# Variables:
-#   $date (Date) - the modification date of the annotation
-#   $time (Time) - the modification time of the annotation
-pdfjs-annotation-date-string = { $date }, { $time }
 # .alt: This is used as a tooltip.
 # Variables:
 #   $type (String) - an annotation type from a list defined in the PDF spec
@@ -302,9 +286,13 @@ pdfjs-web-fonts-disabled = ਵੈਬ ਫੋਂਟ ਬੰਦ ਹਨ: ਇੰਬੈ
 
 pdfjs-editor-free-text-button =
     .title = ਲਿਖਤ
+pdfjs-editor-color-picker-free-text-input =
+    .title = ਲਿਖਤ ਦੇ ਰੰਗ ਨੂੰ ਬਦਲੋ
 pdfjs-editor-free-text-button-label = ਲਿਖਤ
 pdfjs-editor-ink-button =
     .title = ਵਾਹੋ
+pdfjs-editor-color-picker-ink-input =
+    .title = ਡਰਾਇੰਗ ਰੰਗ ਨੂੰ ਬਦਲੋ
 pdfjs-editor-ink-button-label = ਵਾਹੋ
 pdfjs-editor-stamp-button =
     .title = ਚਿੱਤਰ ਜੋੜੋ ਜਾਂ ਸੋਧੋ
@@ -316,6 +304,14 @@ pdfjs-highlight-floating-button1 =
     .title = ਹਾਈਲਾਈਟ
     .aria-label = ਹਾਈਲਾਈਟ
 pdfjs-highlight-floating-button-label = ਹਾਈਲਾਈਟ
+pdfjs-comment-floating-button =
+    .title = ਟਿੱਪਣੀ
+    .aria-label = ਟਿੱਪਣੀ
+pdfjs-comment-floating-button-label = ਟਿੱਪਣੀ
+pdfjs-editor-comment-button =
+    .title = ਟਿੱਪਣੀ
+    .aria-label = ਟਿੱਪਣੀ
+pdfjs-editor-comment-button-label = ਟਿੱਪਣੀ
 pdfjs-editor-signature-button =
     .title = ਦਸਤਖ਼ਤ ਜੋੜੋ
 pdfjs-editor-signature-button-label = ਦਸਤਖ਼ਤ ਜੋੜੋ
@@ -378,20 +374,25 @@ pdfjs-editor-add-saved-signature-button =
 pdfjs-free-text2 =
     .aria-label = ਲਿਖਤ ਐਡੀਟਰ
     .default-content = …ਲਿਖਣਾ ਸ਼ੁਰੂ ਕਰੋ
-pdfjs-free-text =
-    .aria-label = ਲਿਖਤ ਐਡੀਟਰ
-pdfjs-free-text-default-content = …ਲਿਖਣਾ ਸ਼ੁਰੂ ਕਰੋ
-pdfjs-ink =
-    .aria-label = ਵਹਾਉਣ ਐਡੀਟਰ
-pdfjs-ink-canvas =
-    .aria-label = ਵਰਤੋਂਕਾਰ ਵਲੋਂ ਬਣਾਇਆ ਚਿੱਤਰ
+# Used to show how many comments are present in the pdf file.
+# Variables:
+#   $count (Number) - the number of comments.
+pdfjs-editor-comments-sidebar-title =
+    { $count ->
+        [one] ਟਿੱਪਣੀ
+       *[other] ਟਿੱਪਣੀਆਂ
+    }
+pdfjs-editor-comments-sidebar-close-button =
+    .title = ਬਾਹੀ ਨੂੰ ਬੰਦ ਕਰੋ
+    .aria-label = ਬਾਹੀ ਨੂੰ ਬੰਦ ਕਰੋ
+pdfjs-editor-comments-sidebar-close-button-label = ਬਾਹੀ ਨੂੰ ਬੰਦ ਕਰੋ
+pdfjs-editor-comments-sidebar-no-comments-link = ਹੋਰ ਜਾਣੋ
 
 ## Alt-text dialog
 
 pdfjs-editor-alt-text-button-label = ਬਦਲਵੀਂ ਲਿਖਤ
 pdfjs-editor-alt-text-edit-button =
     .aria-label = ਬਦਲਵੀ ਲਿਖਤ ਨੂੰ ਸੋਧੋ
-pdfjs-editor-alt-text-edit-button-label = ਬਦਲਵੀ ਲਿਖਤ ਨੂੰ ਸੋਧੋ
 pdfjs-editor-alt-text-dialog-label = ਚੋਣ ਕਰੋ
 pdfjs-editor-alt-text-dialog-description = ਚਿੱਤਰ ਨਾ ਦਿੱਸਣ ਜਾਂ ਲੋਡ ਨਾ ਹੋਣ ਦੀ ਹਾਲਤ ਵਿੱਚ Alt ਲਿਖਤ (ਬਦਲਵੀਂ ਲਿਖਤ) ਲੋਕਾਂ ਲਈ ਮਦਦਗਾਰ ਹੁੰਦੀ ਹੈ।
 pdfjs-editor-alt-text-add-description-label = ਵਰਣਨ ਜੋੜੋ
@@ -411,14 +412,6 @@ pdfjs-editor-alt-text-button =
 ## Editor resizers
 ## This is used in an aria label to help to understand the role of the resizer.
 
-pdfjs-editor-resizer-label-top-left = ਉੱਤੇ ਖੱਬਾ ਕੋਨਾ — ਮੁੜ-ਆਕਾਰ ਕਰੋ
-pdfjs-editor-resizer-label-top-middle = ਉੱਤੇ ਮੱਧ — ਮੁੜ-ਆਕਾਰ ਕਰੋ
-pdfjs-editor-resizer-label-top-right = ਉੱਤੇ ਸੱਜਾ ਕੋਨਾ — ਮੁੜ-ਆਕਾਰ ਕਰੋ
-pdfjs-editor-resizer-label-middle-right = ਮੱਧ ਸੱਜਾ — ਮੁੜ-ਆਕਾਰ ਕਰੋ
-pdfjs-editor-resizer-label-bottom-right = ਹੇਠਾਂ ਸੱਜਾ ਕੋਨਾ — ਮੁੜ-ਆਕਾਰ ਕਰੋ
-pdfjs-editor-resizer-label-bottom-middle = ਹੇਠਾਂ ਮੱਧ — ਮੁੜ-ਆਕਾਰ ਕਰੋ
-pdfjs-editor-resizer-label-bottom-left = ਹੇਠਾਂ ਖੱਬਾ ਕੋਨਾ — ਮੁੜ-ਆਕਾਰ ਕਰੋ
-pdfjs-editor-resizer-label-middle-left = ਮੱਧ ਖੱਬਾ — ਮੁੜ-ਆਕਾਰ ਕਰੋ
 pdfjs-editor-resizer-top-left =
     .aria-label = ਉੱਤੇ ਖੱਬਾ ਕੋਨਾ — ਮੁੜ-ਆਕਾਰ ਕਰੋ
 pdfjs-editor-resizer-top-middle =
@@ -524,6 +517,14 @@ pdfjs-editor-alt-text-settings-show-dialog-button-label = ਜਦੋਂ ਵਿੱ
 pdfjs-editor-alt-text-settings-show-dialog-description = ਤੁਹਾਡੀ ਮਦਦ ਕਰਦਾ ਹੈ ਕਿ ਤੁਹਾਡੇ ਸਾਰੇ ਚਿੱਤਰਾਂ ਲਈ ਬਦਲਵੀਂ ਲਿਖਤ ਮੌਜੂਦ ਹੋਵੇ।
 pdfjs-editor-alt-text-settings-close-button = ਬੰਦ ਕਰੋ
 
+## Accessibility labels (announced by screen readers) for objects added to the editor.
+
+pdfjs-editor-highlight-added-alert = ਹਾਈਲਾਈਟ ਨੂੰ ਜੋੜਿਆ
+pdfjs-editor-freetext-added-alert = ਲਿਖਤ ਨੂੰ ਜੋੜਿਆ ਗਿਆ
+pdfjs-editor-ink-added-alert = ਡਰਾਇੰਗ ਨੂੰ ਜੋੜਿਆ
+pdfjs-editor-stamp-added-alert = ਚਿੱਤਰ ਨੂੰ ਜੋੜਿਆ
+pdfjs-editor-signature-added-alert = ਦਸਤਖ਼ਤਾਂ ਨੂੰ ਜੋੜਿਆ
+
 ## "Annotations removed" bar
 
 pdfjs-editor-undo-bar-message-highlight = ਹਾਈਲਾਈਟ ਨੂੰ ਹਟਾਇਆ ਗਿਆ
@@ -592,6 +593,8 @@ pdfjs-editor-add-signature-save-checkbox = ਦਸਤਖ਼ਤ ਨੂੰ ਸੰ�
 pdfjs-editor-add-signature-save-warning-message = ਤੁਸੀਂ ਵੱਧ ਤੋਂ ਵੱਧ 5 ਸੰਭਾਲੇ ਦਸਤਖ਼ਤਾਂ ਦੀ ਹੱਦ ਤੱਕ ਅੱਪੜੇ। ਹੋਰ ਸੰਭਾਲਣ ਲਈ ਇੱਕ ਨੂੰ ਹਟਾਓ।
 pdfjs-editor-add-signature-image-upload-error-title = ਚਿੱਤਰ ਨੂੰ ਅੱਪਲੋਡ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ
 pdfjs-editor-add-signature-image-upload-error-description = ਆਪਣੇ ਕਨੈਕਸ਼ਨ ਦੀ ਜਾਂਚ ਕਰੋ ਜਾਂ ਹੋਰ ਚਿੱਤਰ ਨੂੰ ਅਜ਼ਮਾਓ।
+pdfjs-editor-add-signature-image-no-data-error-title = ਇਸ ਚਿੱਤਰ ਨੂੰ ਦਸਤਖ਼ਤ ਵਿੱਚ ਬਦਲਿਆ ਨਹੀਂ ਜਾ ਸਕਦਾ ਹੈ
+pdfjs-editor-add-signature-image-no-data-error-description = ਵੱਖਰੇ ਚਿੱਤਰ ਨੂੰ ਅੱਪਲੋਡ ਕਰਨ ਦੀ ਕੋਸ਼ਿਸ਼ ਕਰੋ।
 pdfjs-editor-add-signature-error-close-button = ਬੰਦ ਕਰੋ
 
 ## Dialog buttons
@@ -599,6 +602,46 @@ pdfjs-editor-add-signature-error-close-button = ਬੰਦ ਕਰੋ
 pdfjs-editor-add-signature-cancel-button = ਰੱਦ ਕਰੋ
 pdfjs-editor-add-signature-add-button = ਜੋੜੋ
 pdfjs-editor-edit-signature-update-button = ਅੱਪਡੇਟ
+
+## Comment popup
+
+pdfjs-editor-edit-comment-popup-button-label = ਟਿੱਪਣੀ ਨੂੰ ਸੋਧੋ
+pdfjs-editor-edit-comment-popup-button =
+    .title = ਟਿੱਪਣੀ ਨੂੰ ਸੋਧੋ
+pdfjs-editor-delete-comment-popup-button-label = ਟਿੱਪਣੀ ਨੂੰ ਹਟਾਓ
+pdfjs-editor-delete-comment-popup-button =
+    .title = ਟਿੱਪਣੀ ਨੂੰ ਹਟਾਓ
+pdfjs-show-comment-button =
+    .title = ਟਿੱਪਣੀ ਨੂੰ ਵੇਖਾਓ
+
+##  Edit a comment dialog
+
+pdfjs-editor-edit-comment-actions-button-label = ਕਾਰਵਾਈਆਂ
+pdfjs-editor-edit-comment-actions-button =
+    .title = ਕਾਰਵਾਈਆਂ
+pdfjs-editor-edit-comment-close-button-label = ਬੰਦ ਕਰੋ
+pdfjs-editor-edit-comment-close-button =
+    .title = ਬੰਦ ਕਰੋ
+pdfjs-editor-edit-comment-actions-edit-button-label = ਸੋਧੋ
+pdfjs-editor-edit-comment-actions-delete-button-label = ਹਟਾਓ
+pdfjs-editor-edit-comment-manager-text-input =
+    .placeholder = ਆਪਣੀ ਟਿੱਪਣੀ ਦਿਓ
+pdfjs-editor-edit-comment-manager-cancel-button = ਰੱਦ ਕਰੋ
+pdfjs-editor-edit-comment-manager-save-button = ਸੰਭਾਲੋ
+# An existing comment is edited
+pdfjs-editor-edit-comment-dialog-title-when-editing = ਟਿੱਪਣੀ ਨੂੰ ਸੋਧੋ
+pdfjs-editor-edit-comment-dialog-save-button-when-editing = ਅੱਪਡੇਟ ਕਰੋ
+# No existing comment
+pdfjs-editor-edit-comment-dialog-title-when-adding = ਟਿੱਪਣੀ ਜੋੜੋ
+pdfjs-editor-edit-comment-dialog-save-button-when-adding = ਜੋੜੋ
+pdfjs-editor-edit-comment-dialog-text-input =
+    .placeholder = …ਲਿਖਣਾ ਸ਼ੁਰੂ ਕਰੋ
+pdfjs-editor-edit-comment-dialog-cancel-button = ਰੱਦ ਕਰੋ
+
+## Edit a comment button in the editor toolbar
+
+pdfjs-editor-edit-comment-button =
+    .title = ਟਿੱਪਣੀ ਨੂੰ ਸੋਧੋ
 
 ## Main menu for adding/removing signatures
 

@@ -112,14 +112,6 @@ pdfjs-document-properties-size-kb = { NUMBER($kb, maximumSignificantDigits: 3) }
 #   $mb (Number) - the PDF file size in megabytes
 #   $b (Number) - the PDF file size in bytes
 pdfjs-document-properties-size-mb = { NUMBER($mb, maximumSignificantDigits: 3) } MB ({ $b } bajtů)
-# Variables:
-#   $size_kb (Number) - the PDF file size in kilobytes
-#   $size_b (Number) - the PDF file size in bytes
-pdfjs-document-properties-kb = { $size_kb } KB ({ $size_b } bajtů)
-# Variables:
-#   $size_mb (Number) - the PDF file size in megabytes
-#   $size_b (Number) - the PDF file size in bytes
-pdfjs-document-properties-mb = { $size_mb } MB ({ $size_b } bajtů)
 pdfjs-document-properties-title = Název stránky:
 pdfjs-document-properties-author = Autor:
 pdfjs-document-properties-subject = Předmět:
@@ -129,10 +121,6 @@ pdfjs-document-properties-modification-date = Datum úpravy:
 # Variables:
 #   $dateObj (Date) - the creation/modification date and time of the PDF file
 pdfjs-document-properties-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
-# Variables:
-#   $date (Date) - the creation/modification date of the PDF file
-#   $time (Time) - the creation/modification time of the PDF file
-pdfjs-document-properties-date-string = { $date }, { $time }
 pdfjs-document-properties-creator = Vytvořil:
 pdfjs-document-properties-producer = Tvůrce PDF:
 pdfjs-document-properties-version = Verze PDF:
@@ -279,10 +267,6 @@ pdfjs-rendering-error = Při vykreslování stránky nastala chyba.
 
 ## Annotations
 
-# Variables:
-#   $date (Date) - the modification date of the annotation
-#   $time (Time) - the modification time of the annotation
-pdfjs-annotation-date-string = { $date }, { $time }
 # .alt: This is used as a tooltip.
 # Variables:
 #   $type (String) - an annotation type from a list defined in the PDF spec
@@ -306,9 +290,13 @@ pdfjs-web-fonts-disabled = Webová písma jsou zakázána, proto není možné p
 
 pdfjs-editor-free-text-button =
     .title = Text
+pdfjs-editor-color-picker-free-text-input =
+    .title = Změna barvy textu
 pdfjs-editor-free-text-button-label = Text
 pdfjs-editor-ink-button =
     .title = Kreslení
+pdfjs-editor-color-picker-ink-input =
+    .title = Změna barvy kresby
 pdfjs-editor-ink-button-label = Kreslení
 pdfjs-editor-stamp-button =
     .title = Přidání či úprava obrázků
@@ -320,6 +308,14 @@ pdfjs-highlight-floating-button1 =
     .title = Zvýraznit
     .aria-label = Zvýraznit
 pdfjs-highlight-floating-button-label = Zvýraznit
+pdfjs-comment-floating-button =
+    .title = Komentář
+    .aria-label = Komentář
+pdfjs-comment-floating-button-label = Komentář
+pdfjs-editor-comment-button =
+    .title = Komentář
+    .aria-label = Komentář
+pdfjs-editor-comment-button-label = Komentář
 pdfjs-editor-signature-button =
     .title = Přidat podpis
 pdfjs-editor-signature-button-label = Přidat podpis
@@ -382,20 +378,29 @@ pdfjs-editor-add-saved-signature-button =
 pdfjs-free-text2 =
     .aria-label = Textový editor
     .default-content = Začněte psát...
-pdfjs-free-text =
-    .aria-label = Textový editor
-pdfjs-free-text-default-content = Začněte psát…
-pdfjs-ink =
-    .aria-label = Editor kreslení
-pdfjs-ink-canvas =
-    .aria-label = Uživatelem vytvořený obrázek
+# Used to show how many comments are present in the pdf file.
+# Variables:
+#   $count (Number) - the number of comments.
+pdfjs-editor-comments-sidebar-title =
+    { $count ->
+        [one] Komentář
+        [few] Komentáře
+        [many] Komentáře
+       *[other] Komentáře
+    }
+pdfjs-editor-comments-sidebar-close-button =
+    .title = Zavřít postranní lištu
+    .aria-label = Zavřít postranní lištu
+pdfjs-editor-comments-sidebar-close-button-label = Zavřít postranní lištu
+# Instructional copy to add a comment by selecting text or an annotations.
+pdfjs-editor-comments-sidebar-no-comments1 = Vidíte něco pozoruhodného? Zvýrazněte to a zanechte komentář.
+pdfjs-editor-comments-sidebar-no-comments-link = Zjistit více
 
 ## Alt-text dialog
 
 pdfjs-editor-alt-text-button-label = Náhradní popis
 pdfjs-editor-alt-text-edit-button =
     .aria-label = Upravit alternativní text
-pdfjs-editor-alt-text-edit-button-label = Upravit náhradní popis
 pdfjs-editor-alt-text-dialog-label = Vyberte možnost
 pdfjs-editor-alt-text-dialog-description = Náhradní popis pomáhá, když lidé obrázek nevidí nebo když se nenačítá.
 pdfjs-editor-alt-text-add-description-label = Přidat popis
@@ -415,14 +420,6 @@ pdfjs-editor-alt-text-button =
 ## Editor resizers
 ## This is used in an aria label to help to understand the role of the resizer.
 
-pdfjs-editor-resizer-label-top-left = Levý horní roh — změna velikosti
-pdfjs-editor-resizer-label-top-middle = Horní střed — změna velikosti
-pdfjs-editor-resizer-label-top-right = Pravý horní roh — změna velikosti
-pdfjs-editor-resizer-label-middle-right = Vpravo uprostřed — změna velikosti
-pdfjs-editor-resizer-label-bottom-right = Pravý dolní roh — změna velikosti
-pdfjs-editor-resizer-label-bottom-middle = Střed dole — změna velikosti
-pdfjs-editor-resizer-label-bottom-left = Levý dolní roh — změna velikosti
-pdfjs-editor-resizer-label-middle-left = Vlevo uprostřed — změna velikosti
 pdfjs-editor-resizer-top-left =
     .aria-label = Levý horní roh — změna velikosti
 pdfjs-editor-resizer-top-middle =
@@ -528,6 +525,14 @@ pdfjs-editor-alt-text-settings-show-dialog-button-label = Při přidávání obr
 pdfjs-editor-alt-text-settings-show-dialog-description = Pomůže vám zajistit, aby všechny vaše obrázky obsahovaly alternativní text.
 pdfjs-editor-alt-text-settings-close-button = Zavřít
 
+## Accessibility labels (announced by screen readers) for objects added to the editor.
+
+pdfjs-editor-highlight-added-alert = Přidáno zvýraznění
+pdfjs-editor-freetext-added-alert = Text přidán
+pdfjs-editor-ink-added-alert = Kresba byla přidána
+pdfjs-editor-stamp-added-alert = Obrázek byl přidán
+pdfjs-editor-signature-added-alert = Byl přidán podpis
+
 ## "Annotations removed" bar
 
 pdfjs-editor-undo-bar-message-highlight = Zvýraznění odebráno
@@ -598,6 +603,8 @@ pdfjs-editor-add-signature-save-checkbox = Uložit podpis
 pdfjs-editor-add-signature-save-warning-message = Dosáhli jste limitu 5 uložených podpisů. Odstraňte jeden a uložte další.
 pdfjs-editor-add-signature-image-upload-error-title = Obrázek se nepodařilo nahrát
 pdfjs-editor-add-signature-image-upload-error-description = Zkontrolujte připojení k síti nebo zkuste jiný obrázek.
+pdfjs-editor-add-signature-image-no-data-error-title = Nelze převést tento obrázek na podpis
+pdfjs-editor-add-signature-image-no-data-error-description = Zkuste nahrát jiný obrázek.
 pdfjs-editor-add-signature-error-close-button = Zavřít
 
 ## Dialog buttons
@@ -605,6 +612,46 @@ pdfjs-editor-add-signature-error-close-button = Zavřít
 pdfjs-editor-add-signature-cancel-button = Zrušit
 pdfjs-editor-add-signature-add-button = Přidat
 pdfjs-editor-edit-signature-update-button = Aktualizovat
+
+## Comment popup
+
+pdfjs-editor-edit-comment-popup-button-label = Upravit komentář
+pdfjs-editor-edit-comment-popup-button =
+    .title = Upravit komentář
+pdfjs-editor-delete-comment-popup-button-label = Odebrat komentář
+pdfjs-editor-delete-comment-popup-button =
+    .title = Odebrat komentář
+pdfjs-show-comment-button =
+    .title = Zobrazit komentář
+
+##  Edit a comment dialog
+
+pdfjs-editor-edit-comment-actions-button-label = Akce
+pdfjs-editor-edit-comment-actions-button =
+    .title = Akce
+pdfjs-editor-edit-comment-close-button-label = Zavřít
+pdfjs-editor-edit-comment-close-button =
+    .title = Zavřít
+pdfjs-editor-edit-comment-actions-edit-button-label = Upravit
+pdfjs-editor-edit-comment-actions-delete-button-label = Smazat
+pdfjs-editor-edit-comment-manager-text-input =
+    .placeholder = Zadejte komentář
+pdfjs-editor-edit-comment-manager-cancel-button = Zrušit
+pdfjs-editor-edit-comment-manager-save-button = Uložit
+# An existing comment is edited
+pdfjs-editor-edit-comment-dialog-title-when-editing = Upravit komentář
+pdfjs-editor-edit-comment-dialog-save-button-when-editing = Aktualizovat
+# No existing comment
+pdfjs-editor-edit-comment-dialog-title-when-adding = Přidání komentáře
+pdfjs-editor-edit-comment-dialog-save-button-when-adding = Přidat
+pdfjs-editor-edit-comment-dialog-text-input =
+    .placeholder = Začněte psát…
+pdfjs-editor-edit-comment-dialog-cancel-button = Zrušit
+
+## Edit a comment button in the editor toolbar
+
+pdfjs-editor-edit-comment-button =
+    .title = Upravit komentář
 
 ## Main menu for adding/removing signatures
 

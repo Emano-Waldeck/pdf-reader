@@ -112,14 +112,6 @@ pdfjs-document-properties-size-kb = { NUMBER($kb, maximumSignificantDigits: 3) }
 #   $mb (Number) - the PDF file size in megabytes
 #   $b (Number) - the PDF file size in bytes
 pdfjs-document-properties-size-mb = { NUMBER($mb, maximumSignificantDigits: 3) } MB ({ $b } bytes)
-# Variables:
-#   $size_kb (Number) - the PDF file size in kilobytes
-#   $size_b (Number) - the PDF file size in bytes
-pdfjs-document-properties-kb = { $size_kb } KB ({ $size_b } bytes)
-# Variables:
-#   $size_mb (Number) - the PDF file size in megabytes
-#   $size_b (Number) - the PDF file size in bytes
-pdfjs-document-properties-mb = { $size_mb } MB ({ $size_b } bytes)
 pdfjs-document-properties-title = Titel:
 pdfjs-document-properties-author = Auteur:
 pdfjs-document-properties-subject = Onderwerp:
@@ -129,10 +121,6 @@ pdfjs-document-properties-modification-date = Wijzigingsdatum:
 # Variables:
 #   $dateObj (Date) - the creation/modification date and time of the PDF file
 pdfjs-document-properties-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
-# Variables:
-#   $date (Date) - the creation/modification date of the PDF file
-#   $time (Time) - the creation/modification time of the PDF file
-pdfjs-document-properties-date-string = { $date }, { $time }
 pdfjs-document-properties-creator = Maker:
 pdfjs-document-properties-producer = PDF-producent:
 pdfjs-document-properties-version = PDF-versie:
@@ -275,10 +263,6 @@ pdfjs-rendering-error = Er is een fout opgetreden bij het weergeven van de pagin
 
 ## Annotations
 
-# Variables:
-#   $date (Date) - the modification date of the annotation
-#   $time (Time) - the modification time of the annotation
-pdfjs-annotation-date-string = { $date }, { $time }
 # .alt: This is used as a tooltip.
 # Variables:
 #   $type (String) - an annotation type from a list defined in the PDF spec
@@ -302,9 +286,13 @@ pdfjs-web-fonts-disabled = Weblettertypen zijn uitgeschakeld: gebruik van ingebe
 
 pdfjs-editor-free-text-button =
     .title = Tekst
+pdfjs-editor-color-picker-free-text-input =
+    .title = Tekstkleur wijzigen
 pdfjs-editor-free-text-button-label = Tekst
 pdfjs-editor-ink-button =
     .title = Tekenen
+pdfjs-editor-color-picker-ink-input =
+    .title = Tekenkleur wijzigen
 pdfjs-editor-ink-button-label = Tekenen
 pdfjs-editor-stamp-button =
     .title = Afbeeldingen toevoegen of bewerken
@@ -316,6 +304,14 @@ pdfjs-highlight-floating-button1 =
     .title = Markeren
     .aria-label = Markeren
 pdfjs-highlight-floating-button-label = Markeren
+pdfjs-comment-floating-button =
+    .title = Opmerking
+    .aria-label = Opmerking
+pdfjs-comment-floating-button-label = Opmerking
+pdfjs-editor-comment-button =
+    .title = Opmerking
+    .aria-label = Opmerking
+pdfjs-editor-comment-button-label = Opmerking
 pdfjs-editor-signature-button =
     .title = Handtekening toevoegen
 pdfjs-editor-signature-button-label = Handtekening toevoegen
@@ -378,20 +374,27 @@ pdfjs-editor-add-saved-signature-button =
 pdfjs-free-text2 =
     .aria-label = Tekstbewerker
     .default-content = Start met typen…
-pdfjs-free-text =
-    .aria-label = Tekstbewerker
-pdfjs-free-text-default-content = Begin met typen…
-pdfjs-ink =
-    .aria-label = Tekeningbewerker
-pdfjs-ink-canvas =
-    .aria-label = Door gebruiker gemaakte afbeelding
+# Used to show how many comments are present in the pdf file.
+# Variables:
+#   $count (Number) - the number of comments.
+pdfjs-editor-comments-sidebar-title =
+    { $count ->
+        [one] Opmerking
+       *[other] Opmerkingen
+    }
+pdfjs-editor-comments-sidebar-close-button =
+    .title = De zijbalk sluiten
+    .aria-label = De zijbalk sluiten
+pdfjs-editor-comments-sidebar-close-button-label = De zijbalk sluiten
+# Instructional copy to add a comment by selecting text or an annotations.
+pdfjs-editor-comments-sidebar-no-comments1 = Ziet u iets noemenswaardigs? Markeer het en laat een opmerking achter.
+pdfjs-editor-comments-sidebar-no-comments-link = Meer info
 
 ## Alt-text dialog
 
 pdfjs-editor-alt-text-button-label = Alternatieve tekst
 pdfjs-editor-alt-text-edit-button =
     .aria-label = Alternatieve tekst bewerken
-pdfjs-editor-alt-text-edit-button-label = Alternatieve tekst bewerken
 pdfjs-editor-alt-text-dialog-label = Kies een optie
 pdfjs-editor-alt-text-dialog-description = Alternatieve tekst helpt wanneer mensen de afbeelding niet kunnen zien of wanneer deze niet wordt geladen.
 pdfjs-editor-alt-text-add-description-label = Voeg een beschrijving toe
@@ -411,14 +414,6 @@ pdfjs-editor-alt-text-button =
 ## Editor resizers
 ## This is used in an aria label to help to understand the role of the resizer.
 
-pdfjs-editor-resizer-label-top-left = Linkerbovenhoek – formaat wijzigen
-pdfjs-editor-resizer-label-top-middle = Midden boven – formaat wijzigen
-pdfjs-editor-resizer-label-top-right = Rechterbovenhoek – formaat wijzigen
-pdfjs-editor-resizer-label-middle-right = Midden rechts – formaat wijzigen
-pdfjs-editor-resizer-label-bottom-right = Rechterbenedenhoek – formaat wijzigen
-pdfjs-editor-resizer-label-bottom-middle = Midden onder – formaat wijzigen
-pdfjs-editor-resizer-label-bottom-left = Linkerbenedenhoek – formaat wijzigen
-pdfjs-editor-resizer-label-middle-left = Links midden – formaat wijzigen
 pdfjs-editor-resizer-top-left =
     .aria-label = Linkerbovenhoek – formaat wijzigen
 pdfjs-editor-resizer-top-middle =
@@ -524,6 +519,14 @@ pdfjs-editor-alt-text-settings-show-dialog-button-label = Alternatieve-tekstbewe
 pdfjs-editor-alt-text-settings-show-dialog-description = Helpt u ervoor te zorgen dat al uw afbeeldingen alternatieve tekst hebben.
 pdfjs-editor-alt-text-settings-close-button = Sluiten
 
+## Accessibility labels (announced by screen readers) for objects added to the editor.
+
+pdfjs-editor-highlight-added-alert = Markering toegevoegd
+pdfjs-editor-freetext-added-alert = Tekst toegevoegd
+pdfjs-editor-ink-added-alert = Tekening toegevoegd
+pdfjs-editor-stamp-added-alert = Afbeelding toegevoegd
+pdfjs-editor-signature-added-alert = Handtekening toegevoegd
+
 ## "Annotations removed" bar
 
 pdfjs-editor-undo-bar-message-highlight = Markering verwijderd
@@ -592,6 +595,8 @@ pdfjs-editor-add-signature-save-checkbox = Handtekening opslaan
 pdfjs-editor-add-signature-save-warning-message = U hebt de limiet van 5 opgeslagen handtekeningen bereikt. Verwijder er een om een andere op te slaan.
 pdfjs-editor-add-signature-image-upload-error-title = Kan afbeelding niet uploaden
 pdfjs-editor-add-signature-image-upload-error-description = Controleer uw netwerkverbinding of probeer een andere afbeelding.
+pdfjs-editor-add-signature-image-no-data-error-title = Kan deze afbeelding niet naar een handtekening converteren
+pdfjs-editor-add-signature-image-no-data-error-description = Probeer een andere afbeelding te uploaden.
 pdfjs-editor-add-signature-error-close-button = Sluiten
 
 ## Dialog buttons
@@ -599,6 +604,48 @@ pdfjs-editor-add-signature-error-close-button = Sluiten
 pdfjs-editor-add-signature-cancel-button = Annuleren
 pdfjs-editor-add-signature-add-button = Toevoegen
 pdfjs-editor-edit-signature-update-button = Bijwerken
+
+## Comment popup
+
+pdfjs-editor-edit-comment-popup-button-label = Opmerking bewerken
+pdfjs-editor-edit-comment-popup-button =
+    .title = Opmerking bewerken
+pdfjs-editor-delete-comment-popup-button-label = Opmerking verwijderen
+pdfjs-editor-delete-comment-popup-button =
+    .title = Opmerking verwijderen
+pdfjs-show-comment-button =
+    .title = Opmerking tonen
+
+##  Edit a comment dialog
+
+pdfjs-editor-edit-comment-actions-button-label = Acties
+pdfjs-editor-edit-comment-actions-button =
+    .title = Acties
+pdfjs-editor-edit-comment-close-button-label = Sluiten
+pdfjs-editor-edit-comment-close-button =
+    .title = Sluiten
+pdfjs-editor-edit-comment-actions-edit-button-label = Bewerken
+pdfjs-editor-edit-comment-actions-delete-button-label = Verwijderen
+pdfjs-editor-edit-comment-manager-text-input =
+    .placeholder = Voer uw opmerking in
+pdfjs-editor-edit-comment-manager-cancel-button = Annuleren
+pdfjs-editor-edit-comment-manager-save-button = Opslaan
+# An existing comment is edited
+pdfjs-editor-edit-comment-dialog-title-when-editing = Opmerking bewerken
+pdfjs-editor-edit-comment-dialog-save-button-when-editing = Bijwerken
+# No existing comment
+pdfjs-editor-edit-comment-dialog-title-when-adding = Opmerking toevoegen
+pdfjs-editor-edit-comment-dialog-save-button-when-adding = Toevoegen
+pdfjs-editor-edit-comment-dialog-text-input =
+    .placeholder = Begin met typen…
+pdfjs-editor-edit-comment-dialog-cancel-button = Annuleren
+
+## Edit a comment button in the editor toolbar
+
+pdfjs-editor-edit-comment-button =
+    .title = Opmerking bewerken
+pdfjs-editor-add-comment-button =
+    .title = Opmerking toevoegen
 
 ## Main menu for adding/removing signatures
 

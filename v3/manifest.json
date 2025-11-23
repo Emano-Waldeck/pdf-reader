@@ -54,6 +54,7 @@
     "all_frames": true,
     "match_origin_as_fallback": true
   }],
+  "incognito": "split",
   "commands": {
     "_execute_action": {
       "description": "Execute Action"

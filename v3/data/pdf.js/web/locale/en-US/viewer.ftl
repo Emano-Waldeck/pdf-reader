@@ -306,9 +306,13 @@ pdfjs-web-fonts-disabled = Web fonts are disabled: unable to use embedded PDF fo
 
 pdfjs-editor-free-text-button =
     .title = Text
+pdfjs-editor-color-picker-free-text-input =
+    .title = Change text color
 pdfjs-editor-free-text-button-label = Text
 pdfjs-editor-ink-button =
     .title = Draw
+pdfjs-editor-color-picker-ink-input =
+    .title = Change drawing color
 pdfjs-editor-ink-button-label = Draw
 pdfjs-editor-stamp-button =
     .title = Add or edit images
@@ -320,6 +324,14 @@ pdfjs-highlight-floating-button1 =
     .title = Highlight
     .aria-label = Highlight
 pdfjs-highlight-floating-button-label = Highlight
+pdfjs-comment-floating-button =
+    .title = Comment
+    .aria-label = Comment
+pdfjs-comment-floating-button-label = Comment
+pdfjs-editor-comment-button =
+    .title = Comment
+    .aria-label = Comment
+pdfjs-editor-comment-button-label = Comment
 pdfjs-editor-signature-button =
     .title = Add signature
 pdfjs-editor-signature-button-label = Add signature
@@ -386,6 +398,24 @@ pdfjs-editor-add-saved-signature-button =
 pdfjs-free-text2 =
     .aria-label = Text Editor
     .default-content = Start typing…
+
+# Used to show how many comments are present in the pdf file.
+# Variables:
+#   $count (Number) - the number of comments.
+pdfjs-editor-comments-sidebar-title =
+    { $count ->
+        [one] Comment
+       *[other] Comments
+    }
+
+pdfjs-editor-comments-sidebar-close-button =
+    .title = Close the sidebar
+    .aria-label = Close the sidebar
+pdfjs-editor-comments-sidebar-close-button-label = Close the sidebar
+
+# Instructional copy to add a comment by selecting text or an annotations.
+pdfjs-editor-comments-sidebar-no-comments1 = See something noteworthy? Highlight it and leave a comment.
+pdfjs-editor-comments-sidebar-no-comments-link = Learn more
 
 ## Alt-text dialog
 
@@ -614,6 +644,8 @@ pdfjs-editor-add-signature-save-checkbox = Save signature
 pdfjs-editor-add-signature-save-warning-message = You’ve reached the limit of 5 saved signatures. Remove one to save more.
 pdfjs-editor-add-signature-image-upload-error-title = Couldn’t upload image
 pdfjs-editor-add-signature-image-upload-error-description = Check your network connection or try another image.
+pdfjs-editor-add-signature-image-no-data-error-title = Can’t convert this image into a signature
+pdfjs-editor-add-signature-image-no-data-error-description = Please try uploading a different image.
 pdfjs-editor-add-signature-error-close-button = Close
 
 ## Dialog buttons
@@ -638,3 +670,35 @@ pdfjs-editor-edit-signature-dialog-title = Edit description
 ## Dialog buttons
 
 pdfjs-editor-edit-signature-update-button = Update
+
+## Comment popup
+
+pdfjs-show-comment-button =
+    .title = Show comment
+
+pdfjs-editor-edit-comment-popup-button-label = Edit comment
+pdfjs-editor-edit-comment-popup-button =
+    .title = Edit comment
+pdfjs-editor-delete-comment-popup-button-label = Remove comment
+pdfjs-editor-delete-comment-popup-button =
+    .title = Remove comment
+
+##  Edit a comment dialog
+
+# An existing comment is edited
+pdfjs-editor-edit-comment-dialog-title-when-editing = Edit comment
+pdfjs-editor-edit-comment-dialog-save-button-when-editing = Update
+
+# No existing comment
+pdfjs-editor-edit-comment-dialog-title-when-adding = Add comment
+pdfjs-editor-edit-comment-dialog-save-button-when-adding = Add
+
+pdfjs-editor-edit-comment-dialog-text-input =
+    .placeholder = Start typing…
+
+pdfjs-editor-edit-comment-dialog-cancel-button = Cancel
+
+## Edit a comment button in the editor toolbar
+
+pdfjs-editor-add-comment-button =
+    .title = Add comment
