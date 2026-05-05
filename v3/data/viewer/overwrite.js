@@ -311,6 +311,61 @@ document.addEventListener('webviewerloaded', function() {
       });
     }
   });
+  // download
+  PDFViewerApplication.initializedPromise.then(() => {
+    // download
+    let saveas = false;
+    // Track Shift key state globally
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Shift') {
+        saveas = true;
+      }
+    });
+    document.addEventListener('keyup', event => {
+      if (event.key === 'Shift') {
+        saveas = false;
+      }
+    });
+    window.addEventListener('blur', () => {
+      saveas = false;
+    });
+
+    PDFViewerApplication.downloadManager.download = new Proxy(PDFViewerApplication.downloadManager.download, {
+      async apply(target, self, args) {
+        const prefs = await chrome.storage.local.get({
+          saveas: false
+        });
+        if ((saveas && prefs.saveas === false) || (saveas === false && prefs.saveas)) {
+          saveas = false;
+          const [data,, filename] = args;
+          // Native Save As dialog
+          try {
+            const handle = await window.showSaveFilePicker({
+              suggestedName: filename || 'document.pdf',
+              types: [{
+                description: 'PDF Document',
+                accept: {'application/pdf': ['.pdf']}
+              }]
+            });
+            const writable = await handle.createWritable();
+            await writable.write(data);
+            await writable.close();
+          }
+          catch (e) {
+            if (e.name === 'AbortError') {
+              console.info('User aborted');
+            }
+            else {
+              return Reflect.apply(target, self, args);
+            }
+          }
+        }
+        else {
+          return Reflect.apply(target, self, args);
+        }
+      }
+    });
+  });
 });
 
 // default tool
@@ -359,4 +414,3 @@ if ('launchQueue' in window && 'files' in LaunchParams.prototype) {
     }
   });
 }
-

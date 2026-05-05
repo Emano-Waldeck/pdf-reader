@@ -1,15 +1,20 @@
 const toast = document.getElementById('toast');
 
 document.getElementById('save').addEventListener('click', () => chrome.storage.local.set({
-  styles: document.getElementById('styles').value
+  styles: document.getElementById('styles').value,
+  saveas: document.getElementById('saveas').value === 'save-as'
 }, () => {
   toast.textContent = 'Options Saved';
   setTimeout(() => toast.textContent = '', 1000);
 }));
 
 chrome.storage.local.get({
-  styles: ''
-}, prefs => document.getElementById('styles').value = prefs.styles);
+  styles: '',
+  saveas: false
+}, prefs => {
+  document.getElementById('styles').value = prefs.styles;
+  document.getElementById('saveas').value = prefs.saveas ? 'save-as' : 'save';
+});
 
 // reset
 document.getElementById('reset').addEventListener('click', e => {

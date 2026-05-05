@@ -51,3 +51,11 @@ a:visited {
     display: none;
   }
 }
+
+.two {
+  display: grid;
+  grid-template-columns: 1fr min-content;
+  grid-gap: 10px;
+  align-items: center;
+  margin-bottom: 1ch;
+}
