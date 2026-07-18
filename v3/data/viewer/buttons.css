@@ -22,6 +22,26 @@
   -webkit-mask-image: url(/data/viewer/default.svg);
   mask-image: url(/data/viewer/default.svg);
 }
+
+.toolbarButton.themeButton::before {
+  -webkit-mask-image: url(/data/viewer/theme.svg);
+  mask-image: url(/data/viewer/theme.svg);
+}
+.themeSelectorToolbar {
+  --editor-toolbar-min-width: 220px;
+  height: auto;
+  width: -moz-max-content;
+  width: max-content;
+  position: absolute;
+  z-index: 30000;
+  cursor: default;
+
+  select {
+    padding: 5px;
+  }
+}
+
+
 .toolbarButton:disabled {
   pointer-events: none;
 }

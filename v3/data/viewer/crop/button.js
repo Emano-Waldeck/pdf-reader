@@ -11,6 +11,15 @@ document.addEventListener('DOMContentLoaded', () => {
     o.guide.install();
     o.capture.install();
     o.monitor.install();
+
+    // Simulate mousemove
+    const mouseMoveEvent = new MouseEvent('mousemove', {
+      view: window,
+      bubbles: true,
+      clientX: e.clientX,
+      clientY: e.clientY
+    });
+    document.body.dispatchEvent(mouseMoveEvent);
   });
 
   const print = async (request, e) => {
