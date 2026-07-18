@@ -66,14 +66,14 @@ const favicon = href => {
       document.head.appendChild(link);
     }
     // backup plan
-    const {hostname, protocol} = new URL(href);
-    if (protocol.startsWith('http')) {
-      const link = document.createElement('link');
-      link.type = 'image/x-icon';
-      link.rel = 'shortcut icon';
-      link.href = protocol + '//' + hostname + '/favicon.ico';
-      document.head.appendChild(link);
-    }
+    // const {hostname, protocol} = new URL(href);
+    // if (protocol.startsWith('http')) {
+    //   const link = document.createElement('link');
+    //   link.type = 'image/x-icon';
+    //   link.rel = 'shortcut icon';
+    //   link.href = protocol + '//' + hostname + '/favicon.ico';
+    //   document.head.appendChild(link);
+    // }
   }
 };
 document.addEventListener('document-open', e => {
@@ -103,9 +103,18 @@ document.addEventListener('document-open', e => {
 
 // prevent CROS error
 delete URL.prototype.origin;
+// URL.parse = new Proxy(URL.parse, {
+//   apply(target, self, args) {
+//     if (args.length === 1 && args[0] === location) {
+//       const file = new URLSearchParams(location.search).get('file');
+//       args[0] = file;
+//     }
+//     return Reflect.apply(target, self, args);
+//   }
+// });
 
 // theme
-const style = document.createElement('style');
+const sheet = new CSSStyleSheet();
 chrome.storage.local.get({
   theme: 'os-theme',
   styles: ''
@@ -114,8 +123,11 @@ chrome.storage.local.get({
     prefs.theme = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark-1' : 'light-1';
   }
   document.documentElement.dataset.theme = prefs.theme;
-  style.textContent = prefs.styles;
-  document.documentElement.appendChild(style);
+
+  if (prefs.styles) {
+    sheet.replaceSync(prefs.styles);
+  }
+  document.adoptedStyleSheets.push(sheet);
 });
 chrome.storage.onChanged.addListener(ps => {
   if (ps.theme) {
@@ -126,7 +138,7 @@ chrome.storage.onChanged.addListener(ps => {
     document.documentElement.dataset.theme = v;
   }
   if (ps.styles) {
-    style.textContent = ps.styles.newValue;
+    sheet.replaceSync(ps.styles.newValue);
   }
 });
 matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {

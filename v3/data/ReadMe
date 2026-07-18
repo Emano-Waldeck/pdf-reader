@@ -1,4 +1,4 @@
-https://github.com/mozilla/pdf.js/releases/download/v5.7.284/pdfjs-5.7.284-dist.zip
+https://github.com/mozilla/pdf.js/releases/download/v6.1.200/pdfjs-6.1.200-dist.zip
 
 adding (pdf.js/web/viewer.html):
   <link rel="stylesheet" href="/data/viewer/buttons.css">
@@ -9,6 +9,6 @@ adding (pdf.js/web/viewer.html):
   <script src="/data/viewer/overwrite.js"></script>
   <script src="/data/viewer/crop/button.js"></script>
   <script src="/data/viewer/cut/button.js"></script>
-
+  <script src="/data/viewer/page-theme/runtime.js"></script>
 
 https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.esm.js
