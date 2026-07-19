@@ -1,3 +1,4 @@
+https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.esm.js
 https://github.com/mozilla/pdf.js/releases/download/v6.1.200/pdfjs-6.1.200-dist.zip
 
 adding (pdf.js/web/viewer.html):
@@ -11,4 +12,11 @@ adding (pdf.js/web/viewer.html):
   <script src="/data/viewer/cut/button.js"></script>
   <script src="/data/viewer/page-theme/runtime.js"></script>
 
-https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.esm.js
+removing (pdf.js/web/viewer.html):
+  <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; worker-src 'self' blob:; style-src 'self'; img-src 'self' blob: data:; media-src blob:; font-src 'self' data:; connect-src * blob: data:; base-uri 'none'; form-action 'none';"
+    />
+
+
+

@@ -102,16 +102,17 @@ document.addEventListener('document-open', e => {
 });
 
 // prevent CROS error
-delete URL.prototype.origin;
-// URL.parse = new Proxy(URL.parse, {
-//   apply(target, self, args) {
-//     if (args.length === 1 && args[0] === location) {
-//       const file = new URLSearchParams(location.search).get('file');
-//       args[0] = file;
-//     }
-//     return Reflect.apply(target, self, args);
-//   }
-// });
+URL.parse = new Proxy(URL.parse, {
+  apply(target, self, args) {
+    if (args.length === 1 && args[0] === location) {
+      const file = new URLSearchParams(location.search).get('file');
+      if (file) {
+        args[0] = file;
+      }
+    }
+    return Reflect.apply(target, self, args);
+  }
+});
 
 // theme
 const sheet = new CSSStyleSheet();
@@ -153,16 +154,16 @@ matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
 
 const hash = () => {
   const e = document.getElementById('viewBookmark')?.getAttribute('href');
-  if (e) {
-    return e;
+  if (e && e.includes('#')) {
+    return '#' + e.split('#')[1];
   }
   else if (PDFViewerApplication.page) {
     return '#page=' + PDFViewerApplication.page;
   }
   return '';
 };
-const copy = content => navigator.clipboard.writeText(content).then(() => {
-  notify('Copied to the Clipboard!', 'info');
+const copy = (content, msg = '') => navigator.clipboard.writeText(content).then(() => {
+  notify(msg || 'Copied to the Clipboard!', 'info');
 }).catch(e => {
   // inside iframe
   const storage = document.createElement('textarea');
@@ -173,7 +174,10 @@ const copy = content => navigator.clipboard.writeText(content).then(() => {
   const r = document.execCommand('copy');
   storage.remove();
 
-  if (!r) {
+  if (r) {
+    notify(msg || 'Copied to the Clipboard!', 'info');
+  }
+  else {
     console.error(e);
     // alert(e.message);
     notify(e.message, 'error');
@@ -184,9 +188,7 @@ const copy = content => navigator.clipboard.writeText(content).then(() => {
 document.addEventListener('DOMContentLoaded', () => {
   const parent = document.querySelector('.toolbarHorizontalGroup.hiddenMediumView');
   const button = document.createElement('button');
-  button.onclick = () => {
-    copy(href + hash());
-  };
+  button.onclick = () => copy(href, 'PDF link is copied to the clipboard'); // Copy without hash
   button.classList.add('toolbarButton', 'hiddenMediumView', 'copyLink');
   // disable default view on unsupported formats
   if (href) {
@@ -196,15 +198,24 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   const span = document.createElement('span');
-  span.textContent = button.title = `Copy Current Page's Link`;
+  span.textContent = button.title = `Copy PDF Link
+
+To copy current's page link, use secondary toolbar's "Current Page" context menu.`;
   button.appendChild(span);
   parent.appendChild(button);
 });
-// bookmark
-document.addEventListener('DOMContentLoaded', () => {
+// Bookmarks
+document.addEventListener('webviewerloaded', async () => {
+  await PDFViewerApplication.initializedPromise;
+  /* Set base URL of PDF's links (bookmarks) to the original URL */
+  PDFViewerApplication.eventBus.on('documentinit', () => {
+    PDFViewerApplication.pdfLinkService.baseUrl = PDFViewerApplication.baseUrl;
+  });
   const b = document.getElementById('viewBookmark');
   b.addEventListener('click', e => {
-    copy(href + hash());
+    copy(b.href, 'Link to the current page is copied to the clipboard');
+    e.preventDefault();
+    e.stopPropagation();
   });
 });
 
@@ -226,7 +237,7 @@ document.addEventListener('DOMContentLoaded', () => {
   parent.appendChild(button);
 });
 
-// default viewer
+// Default Viewer (Native Viewer)
 document.addEventListener('DOMContentLoaded', () => {
   const parent = document.querySelector('.toolbarHorizontalGroup.hiddenMediumView');
   const button = document.createElement('button');
@@ -277,7 +288,7 @@ document.addEventListener('keydown', e => {
 });
 
 // preferences
-document.addEventListener('webviewerloaded', function() {
+document.addEventListener('webviewerloaded', () => {
   PDFViewerApplication._initializeViewerComponents = new Proxy(PDFViewerApplication._initializeViewerComponents, {
     apply(target, self, args) {
       return new Promise(resolve => {
@@ -323,61 +334,77 @@ document.addEventListener('webviewerloaded', function() {
       });
     }
   });
-  // download
-  PDFViewerApplication.initializedPromise.then(() => {
-    // download
-    let saveas = false;
-    // Track Shift key state globally
-    document.addEventListener('keydown', event => {
-      if (event.key === 'Shift') {
-        saveas = true;
-      }
-    });
-    document.addEventListener('keyup', event => {
-      if (event.key === 'Shift') {
-        saveas = false;
-      }
-    });
-    window.addEventListener('blur', () => {
-      saveas = false;
-    });
+});
 
-    PDFViewerApplication.downloadManager.download = new Proxy(PDFViewerApplication.downloadManager.download, {
-      async apply(target, self, args) {
-        const prefs = await chrome.storage.local.get({
-          saveas: false
-        });
-        if ((saveas && prefs.saveas === false) || (saveas === false && prefs.saveas)) {
-          saveas = false;
-          const [data,, filename] = args;
-          // Native Save As dialog
-          try {
-            const handle = await window.showSaveFilePicker({
-              suggestedName: filename || 'document.pdf',
-              types: [{
-                description: 'PDF Document',
-                accept: {'application/pdf': ['.pdf']}
-              }]
-            });
-            const writable = await handle.createWritable();
-            await writable.write(data);
-            await writable.close();
-          }
-          catch (e) {
-            if (e.name === 'AbortError') {
-              console.info('User aborted');
-            }
-            else {
-              return Reflect.apply(target, self, args);
-            }
-          }
+// save as with shift key
+document.addEventListener('webviewerloaded', async () => {
+  await PDFViewerApplication.initializedPromise;
+
+  // download
+  let saveas = false;
+  // Track Shift key state globally
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Shift') {
+      saveas = true;
+    }
+  });
+  document.addEventListener('keyup', event => {
+    if (event.key === 'Shift') {
+      saveas = false;
+    }
+  });
+  window.addEventListener('blur', () => {
+    saveas = false;
+  });
+
+  PDFViewerApplication.downloadManager.download = new Proxy(PDFViewerApplication.downloadManager.download, {
+    async apply(target, self, args) {
+      const prefs = await chrome.storage.local.get({
+        saveas: false
+      });
+      if ((saveas && prefs.saveas === false) || (saveas === false && prefs.saveas)) {
+        saveas = false;
+        const [data,, filename] = args;
+        // Native Save As dialog
+        try {
+          const handle = await window.showSaveFilePicker({
+            suggestedName: filename || 'document.pdf',
+            types: [{
+              description: 'PDF Document',
+              accept: {'application/pdf': ['.pdf']}
+            }]
+          });
+          const writable = await handle.createWritable();
+          await writable.write(data);
+          await writable.close();
         }
-        else {
-          return Reflect.apply(target, self, args);
+        catch (e) {
+          if (e.name === 'AbortError') {
+            console.info('User aborted');
+          }
+          else {
+            return Reflect.apply(target, self, args);
+          }
         }
       }
-    });
+      else {
+        return Reflect.apply(target, self, args);
+      }
+    }
   });
+});
+
+// Translates
+document.addEventListener('webviewerloaded', async () => {
+  await PDFViewerApplication.initializedPromise;
+
+  const translate = () => {
+    document.getElementById('downloadButton').title = 'Save\n\nUse Shift + Click to show save file picker';
+    document.getElementById('viewBookmark').title = `Copy current's page link to the clipboard`;
+
+    PDFViewerApplication.eventBus.off('documentinit', translate);
+  };
+  PDFViewerApplication.eventBus.on('documentinit', translate);
 });
 
 // default tool
